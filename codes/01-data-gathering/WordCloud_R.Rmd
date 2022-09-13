@@ -1,0 +1,77 @@
+---
+title: "Twitter API gather"
+author: "Mingqian Liu"
+date: "2022-09-12"
+output: html_document
+---
+```{r,message=FALSE,warning=FALSE, cache.comments=FALSE,comment=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(plotly)
+library(quantmod)
+library(tm)
+library(RTextTools)
+library(stringr) 
+library(wordcloud) 
+library(tidytext) 
+library(gofastr)
+library(wordcloud2)
+library("selectr")
+library("rvest")
+library("xml2")
+library(rtweet) # for scraping tweets
+library(tm) # for text minning
+library(dplyr) # loads of fun stuff including piping
+library(twitteR)
+library(ROAuth)
+library(jsonlite)
+library(bit64)
+library(base64enc)
+```
+
+
+```{r}
+#twitter api authentification 
+consumer_key = as.character('Yf97lN35cmpNjqvs4YloK5bgj')
+consumer_secret = as.character('gtx7aYcUfP8xR4UcSP53h7HkVnq8oUnn3hQgH24tKmMPJ9wZlw')
+access_token = as.character('1453449116302860297-8CBLV2AMCBbMQcmzyzxr9beZo03EkU')
+access_token_secret = as.character('ll1zMrp5eaTOxLYXrO8lhaph7IL4paJ4PjAdkrri6ILKY')
+bearer_token = as.character('AAAAAAAAAAAAAAAAAAAAABVsegEAAAAASKd3LMyDMSW7bO6pWA0iF9R23cM%3DsCTiS4uKWVzw9tqUhmvD5NDL6zbnd2NCO5BK66jcG3uanmxz6D')
+```
+
+```{r echo=FALSE}
+requestURL='https://api.twitter.com/oauth/request_token'
+accessURL='https://api.twitter.com/oauth/access_token'
+authURL='https://api.twitter.com/oauth/authorize'
+```
+
+```{r warning=FALSE, comment=FALSE, message=FALSE, error=FALSE}
+auth_setup_default()
+Search1 = search_tweets("#insurance",n=200, include_rts = FALSE)
+Search1$full_text = gsub("[^[:alnum:][:blank:]?&/\\-]", "",Search1$full_text) 
+Search1$full_text = gsub("https\\S*", "", Search1$full_text)
+Search1$full_text = gsub("(?!(#|@))[[:punct:]]", "", Search1$full_text, perl = T)
+
+tweets.corpus = Corpus(VectorSource(Search1$full_text))
+tweets.corpus <- tweets.corpus %>%
+  tm_map(removeNumbers) %>% # removes numbers from text
+  tm_map(removePunctuation) %>% # removes punctuation from text
+  tm_map(stripWhitespace) %>% # trims the text of whitespace
+  tm_map(content_transformer(tolower)) %>% # convert text to lowercase
+  tm_map(removeWords,stopwords("english")) %>% # remove stopwords
+  tm_map(removeWords,stopwords("SMART"))
+tdm = TermDocumentMatrix(tweets.corpus) %>% # create a term document matrix
+      as.matrix()
+words = sort(rowSums(tdm), decreasing = TRUE) # count all occurrences of each word and group them
+df = data.frame(word = names(words), freq = words) # convert it to a dataframe
+
+set.seed(909391) # for reproducibility
+wcloud = wordcloud2(df,   # generate word cloud
+                     size = 2,
+                     color= 'random-dark', # set colors
+                     shape = 'pentagon',
+                     rotateRatio = 0) #horizontal looks better, but what do you think?
+wcloud
+```
+
+
