@@ -1,1 +1,2 @@
 load("/Users/liumingqian/anly-501-project-liumingqian0511/data/00-raw-data/rand_spend.RDS")
+load("/Users/liumingqian/anly-501-project-liumingqian0511/data/00-raw-data/rand_sample.RDS")

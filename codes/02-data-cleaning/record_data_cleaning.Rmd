@@ -1,0 +1,81 @@
+---
+title: "Record Data Cleaning"
+author: "Mingqian Liu"
+date: "2022-09-26"
+output: rmdformats::robobook
+---
+
+```{r echo=FALSE,message=FALSE}
+library(tidyverse)
+```
+Click [here]() to access the raw data sets.  
+
+Click [here]() to access the cleaned data set. 
+
+# Data Wrangling
+
+### ==============================================
+### Read in the raw data sets from the site. 
+After inspecting the data sets, we can see that the data sets' dimensions are quite large. For rand_sample, there are 365 variables and 3957 observations. For rand_spend data set, there are 319 variables and 20203 observations. 
+```{r}
+rand_sample = readRDS('~/anly-501-project-liumingqian0511/data/00-raw-data/rand_sample.RDS')
+rand_spend = readRDS('~/anly-501-project-liumingqian0511/data/00-raw-data/rand_spend.RDS')
+dim(rand_sample)
+dim(rand_spend)
+```
+### ==============================================
+### Select interested columns
+According to the data description provided, I respectively selected variables with great relevance to my project from two data sets. Then I subset two data sets according to these variables. Now I have two smaller but more analytically data sets. For rand_sample, I kept 16 columns include but not limited to: income1cpi (family income), ghindxx (general health index), mhix(mental health index) etc. For the rand_spend data, I kept 7 columns include but not limited to: tot_inf(total expenses), out_inf(outpatient expenses), ftf(face-to-face visits) etc. 
+
+```{r}
+rand_sample = rand_sample%>%select(person, plantype, female, blackhisp,age,educper,
+                                  income1cpi,hosp,ghindx,cholest,systol,
+                                  mhi,ghindxx,cholestx,systolx,mhix)
+rand_spend = rand_spend%>%select(person,plantype ,ftf,out_inf,totadm,inpdol_inf,tot_inf)
+dim(rand_sample)
+dim(rand_spend)
+```
+### ==============================================
+### Join Data Sets 
+Since these two data sets came from the same site, the patients they recorded were the same. Merge them into a complete data frame for better analysis. Because we had enough observations for both data sets, I decided to merge them using inner Join. An inner join is such type of join that returns all rows from both the participating tables where the key record of one table is equal to the key records of another table. I assign the joined data frame to a new identifier "rand". For rand data frame, we have 13332 observations and 22 variables. 
+```{r}
+rand = rand_sample%>%inner_join(rand_spend,by='person')
+dim(rand)
+head(rand,10)
+```
+# Data Cleaning
+### ==============================================
+### Drop Duplicates and NA Columns
+After looking at the first ten rows of the RAND data using the head() function, it turns out that the data has many duplicated rows for person. This means that there are a lot of people whose information has been recorded multiple times. Meanwhile, we can find some variables with a large number of missing values, such as 'ghindx'. These variables have so many missing values that the variables themselves can no longer provide useful information for the subsequent analysis, so we decided to remove them. 
+
+```{r}
+rand = rand[!duplicated(rand$person),] 
+rand = subset(rand,select = -c(ghindx,cholest,systol)) #delete cols with too many missing values 
+head(rand)
+```
+### ==============================================
+### Deal with Missing values
+Now, let's continue with the missing values for each observation. Using the sapply() function, a data frame showing the missing values in each column is displayed. In the na_count data frame, I added a column to show the ratio of the missing value of each variable to the total number of observations. According to the output, most variables have less than 13% of observations with missing values. It is noteworthy that the variable 'blackhisp' has more than 20% of observations with missing values, also since it is a Boolean variable that only returns 0 and 1, we cannot replace the missing values with mean, mode or median. Therefore, I decided to remove all those rows with missing values. After completing the rand sample, the data frame still has 2554 rows which is plenty to analyze.
+```{r}
+na_count = data.frame(count_na = sapply(rand, function(x)sum(length(which(is.na(x))))))
+na_count$NA_proportion = (na_count$count_na)/nrow(rand)
+na_count
+rand = rand[complete.cases(rand),]
+dim(rand)
+
+```
+### ==============================================
+### Final Cleaning to Make Data Tidy
+```{r}
+rand = rand%>%rename(nonwhite = blackhisp, education = educper, family_income = income1cpi, hospitalized_last_year = hosp, face_to_face_visit = ftf, total_expenses = tot_inf, outpatient_expenses = out_inf, plan_type = plantype.x)
+rand = subset(rand, select = -c(plantype.y))
+rand = rand%>%mutate(catastrophic = ifelse(plan_type == 'Catastrophic',1,0),
+                     free = ifelse(plan_type == 'Free',1,0))
+```
+
+
+```{r}
+rand
+```
+
+

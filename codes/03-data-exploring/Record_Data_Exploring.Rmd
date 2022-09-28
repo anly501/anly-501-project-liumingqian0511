@@ -1,0 +1,46 @@
+---
+title: "Record_Data_Exploring"
+author: "Mingqian Liu"
+date: "2022-09-27"
+output: rmdformats::robobook
+---
+
+```{r message=FALSE,comment=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(ggcorrplot)
+library(plotly)
+rand = read_csv('~/anly-501-project-liumingqian0511/data/01-modified-data/rand.csv')
+```
+
+# Correlation Matrix
+The first step in exploring data is to see the correlation between quantitative variables, and I used the ggcorplot() function to output a correlation heat map. Correlation heat maps are a type of plot that visualize the strength of relationships between numerical variables. Each square shows the correlation between the variables on each axis. Correlation ranges from -1 to +1. Values close to zero means there is no linear trend between the two variables. Values close to 1 or -1 means there is positive or negative linear relationship exists, and the closer to those values, the stronger the relationship is. According to the heat map for our rand data, we do not perceive strong correlations between any of two variables. Most of the square has light red or light purple. The strongest correlation for numerical variables is 0.4.
+```{r}
+rand_corr = rand[,c(5,6,7,9,10,11,12,14,18)]
+ggcorrplot(round(cor(rand_corr),1),lab = TRUE,type = 'lower')+
+  labs(title = 'Rand Correlation Heatmap')
+```
+
+# Grouped Boxplot 
+Since the main study of my project is how different insurance types affect individual health differently, a box plot is very suitable to gain a quick look at the distribution of the general health index in each insurance category. Box plots give a good graphical image of the concentration of the data. They also show how far the extreme values are from most of the data. We can gather a descent basic statistical summaries from box plots. Based on this box plot, we can find that different insurance types do not bring significant differences to the general health index. All four types of insurance have a mean of general health index around 72. However, after grouped the observations by 'nonwhite', there is still something noteworthy. We see that for all four types of insurance, white individuals have higher general health index than nonwhite individuals and the distribution for white individuals is more negatively skewed.
+
+```{r warning=FALSE}
+ggplot(rand, aes(x=as.factor(plan_type), y=ghindxx, fill=as.factor(nonwhite))) + 
+    geom_boxplot(alpha=0.3) +
+    facet_wrap(~plan_type, scale="free")+
+    scale_fill_brewer(palette="Dark3")+
+  labs(title = 'Grouped Boxplot for Plan Types', x = 'Plan Type', y = 'General Health Index')
+
+
+```
+
+# Histogram of General Health Index
+General Health Index will be the main prediction object of this data, thus I plot a histogram of this variable to show its distribution. A histogram is a display of statistical information that uses rectangles to show the frequency of data items in successive numerical intervals of equal size. General health index is plotted on the horizontal axis and the number of counts is plotted on the vertical axis. We can see that the mode or the most frequently reported general health index is in between 70-75 for both female and male. The overall distribution of the general health index is negatively skewed, which means there are more outliers on the left side of the mean. Also based on this plot, we can find that the the left tail of distribution of health index for female is longer than male's.
+```{r}
+plot3 = ggplot(rand, aes(x = ghindxx, color = as.factor(female), fill = as.factor(female))) +
+geom_histogram(alpha = 0.5) +
+labs(title = 'Histogram of General Health Index',x = 'General Health Index', y = 'Count')
+
+ggplotly(plot3)
+```
+
