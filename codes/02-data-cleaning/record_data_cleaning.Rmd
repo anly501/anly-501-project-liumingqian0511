@@ -8,9 +8,9 @@ output: rmdformats::robobook
 ```{r echo=FALSE,message=FALSE}
 library(tidyverse)
 ```
-Click [here]() to access the raw data sets.  
+Click [here](https://github.com/anly501/anly-501-project-liumingqian0511/tree/main/data/00-raw-data) to access the raw data sets 'rand_sample.RDS','rand_spend.RDS'  
 
-Click [here]() to access the cleaned data set. 
+Click [here](https://github.com/anly501/anly-501-project-liumingqian0511/tree/main/data/01-modified-data) to access the cleaned data set 'rand.csv'.
 
 # Data Wrangling
 
