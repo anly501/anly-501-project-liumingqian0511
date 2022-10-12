@@ -1,0 +1,96 @@
+---
+title: "Naive Bayes with Record Data"
+author: "Mingqian Liu"
+date: "2022-10-10"
+output: rmdformats::robobook
+---
+# Prepare Data for Training
+
+Preparing the record data for Naive Bayes training is a lot different from it of the text data. Naive Bayes is a classification technique based on Bayes' Theorem with an assumption of independence among predictors. In simple terms, a Naive Bayes classifier assumes that the presence of a particular feature in a class is unrelated to the presence of any other feature. The input of Naive Bayes is features (x variables) and the output is the likelihood of the observation falling into specific event or class (y variable). However, most record data is consisted of continuous variables, binning is necessary for the outcome variable. 
+
+The dataset I used consists of 16 variables and 2554 observations. One of the variables is health index, which is rated from 0 to 100 to reflect individual's health condition. I am going to classify the data on health index, and since health index is a continuous variable, the first thing is to cast the column to a categorical variable with multiple groups that represent different health index intervals. I decided to split the column into two groups and apply a binary Naive Bayes training on it. The threshold I chose to split is 75. After casting columns, I partitioned the data into training and testing group by the ratio of 0.8.
+
+
+#### a) Read in the Data
+```{r}
+df = read.csv('~/anly-501-project-liumingqian0511/data/01-modified-data/rand.csv')
+head(df)
+```
+#### b) Cast Continuous Column 
+```{r}
+library(tidyverse)
+df$health_index = ifelse(df$ghindxx < 75,'<75','75-100')
+df = subset(df, select = -c(person,plan_type,ghindxx,outpatient_expenses,free))
+df = df%>%mutate(education = ifelse(education >= 12, 1,0),
+                 inpdol_inf = ifelse(inpdol_inf != 0,1,0))
+X = subset(df,select = -c(health_index))
+Y = subset(df,select = health_index)
+X = data.frame(scale(X))
+df_NB = cbind(X,Y)
+```
+
+#### c) Partition the Data into Training and Testing Set
+```{r}
+set.seed(909391)
+smp_size = floor(0.8 * nrow(df_NB))
+train_ind = sample(seq_len(nrow(df_NB)), size = smp_size)
+
+train = df_NB[train_ind, ]
+test = df_NB[-train_ind, ]
+
+print(paste('Number of observations in training set: ',nrow(train)))
+print(paste('Number of observations in testing set: ',nrow(test)))
+```
+
+# Training with Naive Bayes
+
+We trained the model using 2043 observations in the training set and apply the model to predict testing and training to validate the result. We can see that both groups performed similarly with an accuracy around 62%. This accuracy is not considered high since we are doing a binary Naive Bayes with only two possible outcome events. We can double check with the 2x2 confusion matrices below where the darker the color is, the more accurate predictions. For the testing set, we have 201 out of 511 points that are off. And for the training set, we have 763 out of 2043 that are off. I think this result is due to the nature of this data set itself. Not all data is suitable for Naive Bayes classification, for most continuous record data, the relationship between x and y variables is usually linear and a regression will perform better on this scenario. 
+```{r}
+library(e1071)
+model = naiveBayes(health_index~., data = train, useKernel = T)
+predict_test = predict(model,test)
+(tab01 = table(predict_test,test$health_index,dnn=c("Prediction","Actual")))
+print(paste('The Testing Set Accuracy is:',sum(diag(tab01))/sum(tab01)))
+print(paste('Total Number of Missing Points Out of 511 Points is', 57+144))
+```
+
+```{r}
+predict_train = predict(model,train)
+(tab02 = table(predict_train,train$health_index,dnn=c("Prediction","Actual")))
+print(paste('The Testing Set Accuracy is:',sum(diag(tab02))/sum(tab02)))
+print(paste('Total Number of Missing Points Out of 2043 Points is', 191+572))
+```
+
+```{r}
+library(ggplot2)
+actualClass = factor(c('<75','<75', '75-100', '75-100'))
+PClass = factor(c('<75', '75-100', '<75', '75-100'))
+outcome      = c(181, 144, 57, 129)
+confusion = data.frame(actualClass, PClass, outcome)
+ggplot(data =  confusion, mapping = aes(x = actualClass, y = PClass)) +
+  geom_tile(aes(fill = outcome), colour = "white") +
+  geom_text(aes(label = sprintf("%1.0f", outcome)), vjust = 1) +
+  scale_fill_gradient(low = "light blue", high = "blue") +
+  theme_bw() + theme(legend.position = "none") +
+  ggtitle('Confusion Matrix for Testing')+
+  xlab('Actual')+
+  ylab('Predicted')
+```
+
+```{r}
+library(ggplot2)
+actualClass = factor(c('<75','<75', '75-100', '75-100'))
+PClass = factor(c('<75', '75-100', '<75', '75-100'))
+outcome      = c(714, 612, 172, 545)
+confusion = data.frame(actualClass, PClass, outcome)
+ggplot(data =  confusion, mapping = aes(x = actualClass, y = PClass)) +
+  geom_tile(aes(fill = outcome), colour = "white") +
+  geom_text(aes(label = sprintf("%1.0f", outcome)), vjust = 1) +
+  scale_fill_gradient(low = "pink", high = "purple") +
+  theme_bw() + theme(legend.position = "none") +
+  ggtitle('Confusion Matrix for Training')+
+  xlab('Actual')+
+  ylab('Predicted')
+```
+
+
