@@ -14583,6 +14583,23 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="=================================================================================================================">=================================================================================================================<a class="anchor-link" href="#=================================================================================================================">&#182;</a></h3><h3 id="About-the-Gaussian-Naive-Bayes">About the Gaussian Naive Bayes<a class="anchor-link" href="#About-the-Gaussian-Naive-Bayes">&#182;</a></h3>
+<pre><code>In this section, we are going to classify the data sets using Naive Bayes classifier. The purpose of classification is separating and organizing data into relevant groups (“classes”) based on their shared characteristics. In data science, a classifier is a type of machine learning algorithm used to assign a class label to a data input. An example is an image recognition classifier to label an image (e.g., “car,” “truck,” or “person”). Classifier algorithms are trained using labeled data; in the image recognition example, for instance, the classifier receives training data that labels images. After sufficient training, the classifier then can receive unlabeled images as inputs and will output classification labels for each image. 
+
+There are many algorithms for data classification, naive Bayes classifier belongs to a family of simple "probabilistic classifiers" based on applying Bayes' theorem with strong (naive) independence assumptions between the features. Before we dive into the algorithm itself, I want to review the Bayes theorem a bit with you. Bayes’ Theorem is a simple mathematical formula used for calculating conditional probabilities which is a measure of the probability of an event occurring given that another event has occurred. Applying Bayes’ Theorem to the classification of the data, the output will be the likelihood of an outcome to happen given specific features (input).
+
+</code></pre>
+<h3 id="=================================================================================================================">=================================================================================================================<a class="anchor-link" href="#=================================================================================================================">&#182;</a></h3>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -14606,6 +14623,30 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="1.-Read-in-the-Data">1. Read in the Data<a class="anchor-link" href="#1.-Read-in-the-Data">&#182;</a></h3>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Before applying classification on the data using Naive Bayes, it is very essential to prepare our text data in the form of a matrix where each row represents a tweet and each column represents a word. The value in the matrix will then be the number of occurrences of the corresponding word. This process of converting each text to a long vector is called vectorization, and we have performed this in the data cleaning step and created a vectorized csv file <a href="https://github.com/anly501/anly-501-project-liumingqian0511/tree/main/data/01-modified-data">here</a>. Also in the data cleaning step, I created another word frequency dataframe which returns the frequency of all words in the texts in a desecending order. The purpose of creating the word frequency data frame is subsetting the vectorized text data by the top referenced words. The threshold I chose for 'top referenced' is 170, which is smaller than the total rows of texts.</p>
+<p>I gathered my text data from twitter API, and the search words I used were five popular health insurance company: Aetna, Anthem, Cigna, Humana and UnitedHealth. Before merging these five seperate text datasets into one big dataset, I manually assign them with labels to differentiate their belonging group. The labels that represent their topic of tweets would be the target of prediction. In other words, we are going to classify the data and train a model to predict the likelihood of a text belonging to a specific topic.</p>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -14994,16 +15035,13 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-intense-fg ansi-bold">/Users/liumingqian/anly-501-project-liumingqian0511/codes/04-Naive-Bayes/text_NB.ipynb Cell 5</span> in <span class="ansi-cyan-fg">&lt;cell line: 3&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      &lt;a href=&#39;vscode-notebook-cell:/Users/liumingqian/anly-501-project-liumingqian0511/codes/04-Naive-Bayes/text_NB.ipynb#W4sZmlsZQ%3D%3D?line=1&#39;&gt;2&lt;/a&gt;</span> sd =np.std(df, axis = 0) 
-<span class="ansi-green-intense-fg ansi-bold">      &lt;a href=&#39;vscode-notebook-cell:/Users/liumingqian/anly-501-project-liumingqian0511/codes/04-Naive-Bayes/text_NB.ipynb#W4sZmlsZQ%3D%3D?line=2&#39;&gt;3&lt;/a&gt;</span> for i in range(100):
-<span class="ansi-green-fg">----&gt; &lt;a href=&#39;vscode-notebook-cell:/Users/liumingqian/anly-501-project-liumingqian0511/codes/04-Naive-Bayes/text_NB.ipynb#W4sZmlsZQ%3D%3D?line=3&#39;&gt;4&lt;/a&gt;</span>     df.copy.iloc[:,i] = (df.iloc[:,i] - u[i])/sd[i]
-<span class="ansi-green-intense-fg ansi-bold">      &lt;a href=&#39;vscode-notebook-cell:/Users/liumingqian/anly-501-project-liumingqian0511/codes/04-Naive-Bayes/text_NB.ipynb#W4sZmlsZQ%3D%3D?line=5&#39;&gt;6&lt;/a&gt;</span> df.head()
+<pre>/var/folders/0y/czdjt9k17_9fgxmg3d286zjm0000gn/T/ipykernel_68462/602878240.py:4: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
 
-<span class="ansi-red-fg">AttributeError</span>: &#39;function&#39; object has no attribute &#39;iloc&#39;</pre>
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df.iloc[:,i] = (df.iloc[:,i] - u[i])/sd[i]
+</pre>
 </div>
 </div>
 
@@ -15011,6 +15049,29 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="--------------------------------------------------------------------------------------------------">--------------------------------------------------------------------------------------------------<a class="anchor-link" href="#--------------------------------------------------------------------------------------------------">&#182;</a></h3><h3 id="2.-Partition-the-Data-into-Train-and-Test">2. Partition the Data into Train and Test<a class="anchor-link" href="#2.-Partition-the-Data-into-Train-and-Test">&#182;</a></h3>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Separating data into training and testing sets is an important part of evaluating data mining models. Typically, when you separate a data set into a training set and testing set, most of the data is used for training, and a smaller portion of the data is used for testing. The purpose of spliting the data into two sets is for validating the model that we train. After a model has been processed by using the training set, we test the model by making predictions against the test set. Because the data in the testing set already contains known values for the attribute that you want to predict, it is easy to determine whether the model's guesses are correct. If the model we fitted using training data can precisely predict the result of testing, then we can validate that the model is good. Using the <strong>sklearn.model_selection</strong> package, I splited the data into x_train, x_test, y_train and y_test with the ratio 0.2 between the train and test. I am going to use x_train and y_train to train the model and apply it on x_test and y_test for validation.</p>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -15081,6 +15142,30 @@ y_test.shape		: (54,)
 
 </div>
 
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="--------------------------------------------------------------------------------------------------">--------------------------------------------------------------------------------------------------<a class="anchor-link" href="#--------------------------------------------------------------------------------------------------">&#182;</a></h3><h3 id="3.-Training-using-Gaussian-Naive-Bayes.">3. Training using Gaussian Naive Bayes.<a class="anchor-link" href="#3.-Training-using-Gaussian-Naive-Bayes.">&#182;</a></h3>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p>Still using the sklearn package, the outcome is printed below. The accuracy of 96% in the training set is considered very high, only 7 texts were mislabeled out of the total 215 texts in the training set. However, high accuracy in the training set is not enough to validate the model since the model itself is trained using this set. We can see from the result that the accuracy of testing set drops to 65%. It is not a bad outcome considered we have 5 classes as the target. This number means that when we use the Gaussian Naive Bayes model that we trained from the training sets to predict the the outcome on testing set, the likelihood of the prediction to be accurate is 65%.</p>
+<p>To interpret the confusion matrix that generated by using the sklearn package, we just need to focus on the diagonal of the matrix which represents the accurate cases when we successfully predicted the outcome. The more yellowish, the higher accuracy the prediction is. As shown in the confusion matrix plots below, we can see that the diagonal of confusion matrix in the training set is a lot brighter than in the testing set. But overall in both matrices the diagonal is brighter than the other squares which means that there are a lot more accurate cases than the inaccurate ones.</p>
+
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -15206,7 +15291,7 @@ ERROR [-4  0  0 -2  0  0  2  0  0  4  0  0 -1 -2  0  0  0 -2  0  0]
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fc7da548a30&gt;</pre>
+<pre>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fc80ec42620&gt;</pre>
 </div>
 
 </div>
@@ -15277,7 +15362,7 @@ class="
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fc7f8c179d0&gt;</pre>
+<pre>&lt;sklearn.metrics._plot.confusion_matrix.ConfusionMatrixDisplay at 0x7fc7f97e6c20&gt;</pre>
 </div>
 
 </div>
