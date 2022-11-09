@@ -123,7 +123,6 @@ header .scrolldown a:hover { color: #11ABB0; }
 --------------------------------------------------------------------- */
 #nav-wrap ul, #nav-wrap li, #nav-wrap a {
 	 margin: 0;
-	 padding: 0;
 	 border: none;
 	 outline: none;
 }
@@ -134,7 +133,7 @@ header .scrolldown a:hover { color: #11ABB0; }
    width: 100%;
    text-transform: uppercase;
    letter-spacing: 2.5px;
-   margin: 0 auto;
+   margin: auto;
    z-index: 100;
    position: fixed;
    left: 0;
@@ -142,13 +141,13 @@ header .scrolldown a:hover { color: #11ABB0; }
 }
 .opaque { background-color: #333; }
 .dropdown .dropbtn {
-   font: 12px 'opensans-bold', sans-serif;
+   font: 13px 'opensans-bold', sans-serif;
    width: 100%;
    text-transform: uppercase;
    letter-spacing: 2.5px;
    margin: 0 auto;
    color: white;
-   padding: 14px 16px;
+   padding: 17px 20px;
    background-color: inherit;
    font-family: inherit; /* Important for vertical align on mobile phones */
    margin: 0; /* Important for vertical align on mobile phones */
@@ -156,7 +155,7 @@ header .scrolldown a:hover { color: #11ABB0; }
  .dropdown-content {
    display: none;
    position: absolute;
-   min-width: 160px;
+   min-width: 200px;
    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
    z-index: 1;
  }

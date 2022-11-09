@@ -1,0 +1,283 @@
+---
+jupyter: python3
+title: "Methods and Results"
+date: "11/05/2022"
+pdf-engine: lualatex
+format:
+  html:
+    theme : Minty
+    code-tools: true
+    code-fold: true
+    code-summary: "Code"
+    toc: true
+    toc-title: Contents
+execute:
+    warning: false
+---
+
+```{python}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import scipy.cluster.hierarchy as sch
+import sklearn.cluster as cluster
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from scipy.spatial.distance import cdist 
+from sklearn.cluster import DBSCAN
+from sklearn.metrics import silhouette_samples, silhouette_score
+from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.feature_selection import VarianceThreshold
+sns.set_theme(style="whitegrid", palette='Set2')
+import plotly.express as px
+from sklearn.decomposition import PCA
+```
+
+## Data Selection
+
+As I mentioned in the theory page, clustering is a method of unsupervised learning that takes data that does not contain any labels or explicit instructions on what to do with it. Here, I remove the labels (targets) from the quantitative dataset and keep only the numeric record feature in the dataset so that it is suitable for clustering. 
+
+```{python}
+df = pd.read_csv('/Users/liumingqian/anly-501-project-liumingqian0511/data/01-modified-data/rand.csv')
+df['plan_type'] = df['plan_type'].astype('category').cat.codes
+df.drop(columns = ['person','catastrophic','free','outpatient_expenses','mhi'], inplace = True)
+df.head()
+
+X = df.drop(columns=['plan_type'])
+y = df['plan_type']
+X.head()
+```
+
+## Feature Selection
+
+Before starting to cluster the features, I perform a filter based feature selection on the dataset as a preprocessing step. I used variance threshold in sklearn to filter out the less informative x features. There were 6 columns deleted after the process and left us an X subset with 10 columns. 
+```{python}
+var_thr = VarianceThreshold(threshold = 0.25)
+X_high_variance = var_thr.fit_transform(X)
+scale = StandardScaler()
+scale.fit(X_high_variance)
+X = scale.transform(X_high_variance)
+print(X.shape)
+```
+
+## K-means
+### Hyper-parameter Tuning
+
+- Cluster tuning
+
+```{python}
+# for k means clustering we will use the elbow method to find the optimal number of clusters. we will use the inertia_ attribute to find the sum of squared distances of samples to their closest cluster center. we will use the range of 1 to 10 clusters. plot the inertia_ values for each number of clusters. make sure to save it in a dataframe and plot it using matplotlib.
+distortions = [] 
+inertias = []
+sil = []
+K = range(1,11)
+for k in K: 
+    kmeanModel = KMeans(n_clusters=k)
+    kmeanModel.fit(X)     
+    distortions.append(sum(np.min(cdist(X, kmeanModel.cluster_centers_, 'euclidean'),axis=1)) / X.shape[0]) 
+    inertias.append(kmeanModel.inertia_) 
+    result= pd.DataFrame({'Cluster':np.arange(1,k+1),'Distortion':distortions, 'Inertia':inertias})
+
+print(result)
+```
+
+```{python}
+fig, (ax1,ax2) = plt.subplots(2, 1)
+fig.set_size_inches(7,7)
+ax1.plot(result['Cluster'],result['Inertia'],'orange')
+ax1.set_title('K vs Inertia')
+ax2.plot(result['Cluster'],result['Distortion'],'green',label='Distortion vs. K')
+ax2.set_title('K vs Distortion')
+```
+According to the plots and result from elbow method, the optimal cluster size is 3 where both inertia and distortion is acceptablely small for the size of cluster.
+
+```{python}
+sil = []
+for k in K:
+    kmeanModel = KMeans(n_clusters=k)
+    kmeanModel.fit(X)
+    labels = kmeanModel.labels_
+    if len(np.unique(labels)) == 1:
+        continue
+    sil.append(silhouette_score(X, labels))
+    result_sil = pd.DataFrame({'Cluster':np.arange(2,k+1), 'Silhouette':sil})
+
+print(result_sil)
+result_sil.plot.line(x = 'Cluster',subplots=True)
+```
+According to the result from the Silouette score, the optimal cluster size for k-means is either 2 or 3. Combined with the result from the Elbow method, I decided to use 3 as the final cluster size for the k-means model. 
+
+### Final Result
+
+```{python}
+kmeanModel = KMeans(n_clusters=3)
+kmeanModel.fit(X)
+labels01=np.array(kmeanModel.labels_)
+print('The optimal cluster size for k-means clustering is:',len(np.unique(labels01)))
+```
+
+```{python}
+pca = PCA(n_components=3)
+components = pca.fit_transform(X)
+total_var = pca.explained_variance_ratio_.sum() * 100
+fig = px.scatter_3d(
+    components, x=0, y=1, z=2, color=labels01,
+    color_continuous_scale="GnBu",
+    title=f'Total Explained Variance: {total_var:.2f}%',
+    range_x=[-3,6],
+    range_y = [-3,6],
+    range_z = [0,6],
+    width=900,
+    height=600
+)
+fig.update_layout(
+    margin=dict(l=20, r=20, t=20, b=20),
+    paper_bgcolor="LightSteelBlue",
+    title_text = 'K-means',
+    title_x = 0.5,
+    title_y = 0.9
+)
+fig.update_traces(marker_size = 3)
+fig.show()
+```
+
+## DBSCAN
+### Hyper-parameter Tuning
+
+For DBSCAN, eps and minimum sample is very crucial to be tuned for the optimal result. I used silouttle score to determine the value of these two hyper-parameters. For the final model, I choose an eps of 1.8 and min_sample of 5. 
+
+- eps
+
+```{python}
+eps_range = np.arange(0.1,2.1,0.1)
+for i in eps_range:
+    db = DBSCAN(eps=i, min_samples=5).fit(X)
+    labels = db.labels_
+    if len(np.unique(labels)) == 1:
+        continue
+    silhouette_avg = silhouette_score(X, labels)
+    print(
+        "For eps = {:0.2f}".format(i),
+        "The average silhouette_score is {:0.4f}.".format(silhouette_avg)
+    )
+```
+
+- minimum sample
+
+```{python}
+S = np.arange(1,11)
+for s in S:
+    db = DBSCAN(eps=1.8, min_samples=s).fit(X)
+    labels = db.labels_
+    if len(np.unique(labels)) == 1:
+        continue
+    silhouette_avg = silhouette_score(X, labels)
+    print(
+        "For min_samples = {:0.2f}".format(s),
+        "The average silhouette_score is {:0.4f}.".format(silhouette_avg)
+    )
+```
+
+### Final Result
+
+```{python}
+db = DBSCAN(eps=1.8, min_samples=5).fit(X)
+labels02 = db.labels_
+len(np.unique(labels02))
+pca = PCA(n_components=3)
+components = pca.fit_transform(X)
+total_var = pca.explained_variance_ratio_.sum() * 100
+fig = px.scatter_3d(
+    components, x=0, y=1, z=2, color=labels02,
+    color_continuous_scale="Plotly3",
+    title=f'Total Explained Variance: {total_var:.2f}%',
+    range_x=[0,10],
+    range_y = [-3,4],
+    width=900,
+    height=600
+)
+fig.update_layout(
+    margin=dict(l=20, r=20, t=20, b=20),
+    paper_bgcolor='LightSteelBlue',
+    title_text = 'DBSCAN',
+    title_x = 0.5,
+    title_y = 0.9
+)
+fig.update_traces(marker_size = 4)
+fig.show()
+```
+
+## Agglomerative Clustering
+### Hyper-parameter Tuning
+
+The implementation of the Agglomerative Clustering algorithm accepts the number of desired clusters. There are several ways to find the optimal number of clusters and I used the dendrogram to decide the value. From the below dendrogram plot, find a horizontal rectangle with max-height that does not cross any horizontal vertical dendrogram line. I marked the dendrogram by a red line and we can see that there are three vertical lines intersect with it. Thus, the optimal cluster size for the final model is 3.  
+```{python}
+import scipy.cluster.hierarchy as sch
+cluster_visualising=sch.dendrogram(sch.linkage(X,method='ward'))
+plt.title('Dendrogram')
+plt.xlabel('Clusters')
+plt.ylabel('Euclidean distances')
+plt.axhline(y=50, color='r', linestyle='--')
+plt.show()
+```
+
+```{python}
+agg=AgglomerativeClustering(n_clusters = 3, affinity = 'euclidean', linkage = 'ward')
+agg.fit(X)
+agg_pred=agg.fit_predict(X)
+labels03 = agg.labels_
+```
+
+### Final Result
+
+```{python}
+pca = PCA(n_components=3)
+components = pca.fit_transform(X)
+total_var = pca.explained_variance_ratio_.sum() * 100
+fig = px.scatter_3d(
+    components, x=0, y=1, z=2, color=labels03,
+    color_continuous_scale="GnBu",
+    title=f'Total Explained Variance: {total_var:.2f}%',
+    range_x=[0,9],
+    range_y = [-3,4],
+    width=900,
+    height=600
+)
+fig.update_layout(
+    margin=dict(l=20, r=20, t=20, b=20),
+    paper_bgcolor='LightSteelBlue',
+    title_text = 'Agglomerative Cluster',
+    title_x = 0.5,
+    title_y = 0.9
+)
+fig.update_traces(marker_size = 4)
+fig.show()
+```
+
+# Results
+A good cluster result should have points in the same cluster closer to each other and points in the different clusters far apart from each other. We can measure how separate the clusters are by computing the silhouette score, the closer to 1 the more separate clusters are. Results below shows the model using DBSCAN score the highest. But, does it necessarily mean it is the best cluster model for our data? 
+
+It is a little too arbitrary jumping into a conclusion now. Let's take a look at the below 2D scatterplots. The 2d scatterplots are really not informative to look at and all the data points jammed up together. Based on the 2d scatterplots, none of these models is suggesting any clusters or meaningful patterns. Combined with the silhouette score printed above, this result is not really surprising. Because none of the three models achieved a very satisfactory silhouette score, this means the separation between groups is not significantly shown. Especially for k-means and agglomerative, their score is only slightly above 0. 
+
+The poor performance of 2D scatterplot is not only due to the low silhouette score of the cluster itself, but also largely responsible to the problem of data dimensionality. When plotting the 2D scatterplot, only two features are used for reference, which is not accurate to plot the position of each data point. Let's take another look at the 3D scatterplots that I previously shown in each section of different models. The clusters and patterns are clearly shown in 3D scatterplots where data points are no longer jammed up together but only gathered in their corresponding cluster. Comparing the three plots, we can see that k-means seemed to work the best since the the data points are very seperate between groups and tight to their centroids.
+
+```{python}
+print('The silhouette score for the final model of k-means is:',silhouette_score(X, labels01))
+print('The silhouette score for the final model of DBCAN is:',silhouette_score(X, labels02))
+print('The silhouette score for the final model of Agglomerative is:',silhouette_score(X, labels03))
+```
+
+```{python}
+fig, (ax1, ax2, ax3) = plt.subplots(1, 3)
+fig.set_size_inches(20, 8)
+ax1.scatter(X[:,4], X[:,5],c=labels01,cmap='Purples_r')
+ax1.set_title('k-means')
+ax2.scatter(X[:,4], X[:,5],c=labels02,cmap='Blues')
+ax2.set_title('DBSCAN')
+ax3.scatter(X[:,4], X[:,5],c=labels03,cmap='Purples_r')
+ax3.set_title('Agglomerative')
+```
+
