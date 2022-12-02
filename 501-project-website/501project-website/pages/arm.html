@@ -236,7 +236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="introduction" class="level3">
 <h3 class="anchored" data-anchor-id="introduction">Introduction</h3>
-<p>In this section, I am going to apply association rule mining (ARM) on the modified text data and utilize the apriori algorithm to generate rules that are significant in support, confidence, and lift level. Remember that the text data was gathered from the Twitter API using four different health insurance brands as the hashtag, and each data is a tweet from a user. The variables in this dataset include text(tweet), author, date, label, etc. ARM will be employed only on the text variable and rules will be generated based on the tokenized word in each tweet. The result of an ARM can discover the inner relations between the words in a tweet. For example, we may find out a rule says that if someone mentioned the word “health” and “disease” in a tweet, he/she will very likely mention “insurance” as well. ARM has demonstrated critical analytical importance in many areas because its rules can help the market implement better policies. However, in this project, since the initial data was not collected for Market Basket Analysis, the application of ARM will be more for practice, and the final rules may be less informative and meaningful.</p>
+<p>In this section, I am going to apply association rule mining (ARM) on the modified text data and utilize the apriori algorithm to generate rules that are significant in support, confidence, and lift level. Remember that the text data was gathered from the Twitter API using four different health insurance brands as the hashtag, and each data is a tweet from a user. The variables in this dataset include text(tweet), author, date, label, etc. ARM will be employed only on the text variable and rules will be generated based on the tokenized word in each tweet. The result of an ARM can discover the inner relations between the words in a tweet. For example, we may find out a rule says that if someone mentioned the word "health" and "disease" in a tweet, he/she will very likely mention "insurance" as well. ARM has demonstrated critical analytical importance in many areas because its rules can help the market implement better policies. However, in this project, since the initial data was not collected for Market Basket Analysis, the application of ARM will be more for practice, and the final rules may be less informative and meaningful.</p>
 <p><strong>What is a transaction data?</strong></p>
 <p>Transactional data is information that is captured from transactions. It records the time of the transaction, the place where it occurred, the price points of the items bought, the payment method employed, discounts if any, and other quantities and qualities associated with the transaction. An example of a simplied transaction data is presented below. The column TID stands for the transaction ID.</p>
 <table class="table">
@@ -276,17 +276,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p><strong>How are tweets going to look like in transaction data?</strong></p>
-<p>By this point, you might be wondering how do we apply ARM to tweets that look nothing like transactions. But in fact, itemset in transactional data does not necessarily have to be a real collection of items in someone’s checkout basket, it can take demographic features, categorical variables, or a bag of words like a tweet. All we need to do is to tokenize each tweet and make each word an item in the itemset. The inner relationships between the ‘items’ will be the correlation between words.</p>
+<p>By this point, you might be wondering how do we apply ARM to tweets that look nothing like transactions. But in fact, itemset in transactional data does not necessarily have to be a real collection of items in someone's checkout basket, it can take demographic features, categorical variables, or a bag of words like a tweet. All we need to do is to tokenize each tweet and make each word an item in the itemset. The inner relationships between the 'items' will be the correlation between words.</p>
 </section>
 <section id="theory" class="level3">
 <h3 class="anchored" data-anchor-id="theory">Theory</h3>
-<p>Association Rule is one of the most important concepts of machine learning being used in market basket analysis. Association rule mining is a rule-based machine learning method for discovering inner relationships between itemsets in large databases. It identifies frequent if-then associations called association rules which consists of an antecedent (if) and a consequent (then). Antecedent is always called the left-hand-side (LHS) and consequent is called right-hand-side (RHS). For example, in the rule “if milk and bread are purchased, then egg would also be bought by the customer”, milk and bread will be the left-hand-side and egg will be the right-hand-side.</p>
+<p>Association Rule is one of the most important concepts of machine learning being used in market basket analysis. Association rule mining is a rule-based machine learning method for discovering inner relationships between itemsets in large databases. It identifies frequent if-then associations called association rules which consists of an antecedent (if) and a consequent (then). Antecedent is always called the left-hand-side (LHS) and consequent is called right-hand-side (RHS). For example, in the rule "if milk and bread are purchased, then egg would also be bought by the customer", milk and bread will be the left-hand-side and egg will be the right-hand-side.</p>
 <p><strong>How do we determine a rule?</strong></p>
 <p>There are three key metrics to measure association and help us to determine a rule: support, confidence, and lift.</p>
 <ul>
 <li>Support</li>
 </ul>
-<p>Within a dataset, how likely the transactions contain item A will be the support for A., so it is just the probability of item A occurring, which we can represent as below. Statistically speaking, it is a frequentist’s estimate of the probability.</p>
+<p>Within a dataset, how likely the transactions contain item A will be the support for A., so it is just the probability of item A occurring, which we can represent as below. Statistically speaking, it is a frequentist's estimate of the probability.</p>
 <p><span class="math display">\[Support({A}) = P(A) = \frac{Transaction\,containing\,A}{Total\,number\,of\,transactions}
 \]</span></p>
 <ul>
@@ -424,7 +424,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="results" class="level3">
 <h3 class="anchored" data-anchor-id="results">Results</h3>
-<p>The major hyperparameters for apriori algorithm include min_support, min_confidence, min_lift. A greater value of these thresholds will limit the number of rules that are generalized. After manually tuning the min_support and min_confidence by setting them to really small values, we ended up having 26 rules in total. However, I found that many rules include only “#” sign in either LHS or RHS and I decided to remove those rules because they are not informative. This left us 10 association rules eventually.</p>
+<p>The major hyperparameters for apriori algorithm include min_support, min_confidence, min_lift. A greater value of these thresholds will limit the number of rules that are generalized. After manually tuning the min_support and min_confidence by setting them to really small values, we ended up having 26 rules in total. However, I found that many rules include only "#" sign in either LHS or RHS and I decided to remove those rules because they are not informative. This left us 10 association rules eventually.</p>
 <div class="cell" data-execution_count="6">
 <details>
 <summary>Code</summary>
@@ -435,9 +435,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Transactions:                0      1        2           3           4       5          6   \
-0  loyolaramblers    𝗧𝗵𝗲  𝗥𝗮𝗺𝗯𝗹𝗲𝗿  𝗥𝗼𝘂𝗻𝗱𝘁𝗮𝗯𝗹𝗲     present   aetna  christian   
+0  loyolaramblers    The  Rambler  Roundtable     present   aetna  christian   
 1         pom_pnw  aetna     give   directory    resident   house    address   
-2      peds_ortho  aetna        ’      doctor           ’  office       take   
+2      peds_ortho  aetna        '      doctor           '  office       take   
 3           aetna  twice     deny   necessary  medication     b/c   whatever   
 4      peds_ortho  aetna      pay       copay        meet     oop      limit   
 
@@ -446,7 +446,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 1  psychiatrist  recommendation       None  ...  None  None  None  None  None   
 2         copay    subsequently  reimburse  ...  None  None  None  None  None   
 3        stupid          policy     giving  ...  None  None  None  None  None   
-4             ’             pay      copay  ...  None  None  None  None  None   
+4             '             pay      copay  ...  None  None  None  None  None   
 
      47    48    49    50    51  
 0  None  None  None  None  None  
@@ -459,7 +459,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 (26, 6)</code></pre>
 </div>
 </div>
-<p>The printed data frame below is the finalized rules after removing the not informative ones. We can see that all the rules have low support levels which is suggesting that the itemsets are not common overall. The highest support happens to the itemset {group, united} which is around 0.1. This means tweets that contain the word ‘group’ and ‘UnitedHealth’ accounted for only 10 percent of all tweets. The confidence level for this rule is also the highest among all rules, which is 0.89. This means among all the tweets with the word ‘group’, there is a 90% chance to have the word ‘UnitedHealth’ also occur. The second high-support and high-confidence rule is {national, anthem}. The probability of tweets with both words to occur is around 6% and among all tweets with the “national” in it, there is an 89% chance to have the word “anthem” also occur. By looking at the networking plot, I find that there are more rules associated with the word “group” than other words.</p>
+<p>The printed data frame below is the finalized rules after removing the not informative ones. We can see that all the rules have low support levels which is suggesting that the itemsets are not common overall. The highest support happens to the itemset {group, united} which is around 0.1. This means tweets that contain the word 'group' and 'UnitedHealth' accounted for only 10 percent of all tweets. The confidence level for this rule is also the highest among all rules, which is 0.89. This means among all the tweets with the word 'group', there is a 90% chance to have the word 'UnitedHealth' also occur. The second high-support and high-confidence rule is {national, anthem}. The probability of tweets with both words to occur is around 6% and among all tweets with the "national" in it, there is an 89% chance to have the word "anthem" also occur. By looking at the networking plot, I find that there are more rules associated with the word "group" than other words.</p>
 <div class="cell" data-execution_count="7">
 <details>
 <summary>Code</summary>
@@ -501,7 +501,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="conclusion" class="level3">
 <h3 class="anchored" data-anchor-id="conclusion">Conclusion</h3>
-<p>Once again, this section is more for me to practice the use of ARM because the data I am using is not so applicable to this analysis. ARM performs better in very large data sets because its core algorithm uses probability. Larger samples will provide more generalized and more accurate rules. Unfortunately, the data we used was less than 300 tweets and they had been assigned labels beforehand. However, ARM can play a good role in analyzing the relationship between text, and its results can also be very meaningful. If we didn’t assign labels to every tweet beforehand, and only kept the rule that the right-hand side was a word related to an insurance brand, like “unitedhealth”, then the generalized rules would offer keywords for different brands of insurance. These keywords may reflect the quality, user experience, benefits, disadvantages, and so on of the brand insurance. This will help brands to upgrade their products in a more targeted and accurate way. Although we have not generated practical and meaningful rules on the current data, the efficiency and usefulness of ARM for text data are undeniable.</p>
+<p>Once again, this section is more for me to practice the use of ARM because the data I am using is not so applicable to this analysis. ARM performs better in very large data sets because its core algorithm uses probability. Larger samples will provide more generalized and more accurate rules. Unfortunately, the data we used was less than 300 tweets and they had been assigned labels beforehand. However, ARM can play a good role in analyzing the relationship between text, and its results can also be very meaningful. If we didn't assign labels to every tweet beforehand, and only kept the rule that the right-hand side was a word related to an insurance brand, like "unitedhealth", then the generalized rules would offer keywords for different brands of insurance. These keywords may reflect the quality, user experience, benefits, disadvantages, and so on of the brand insurance. This will help brands to upgrade their products in a more targeted and accurate way. Although we have not generated practical and meaningful rules on the current data, the efficiency and usefulness of ARM for text data are undeniable.</p>
 <!-- -->
 
 </section>
@@ -704,7 +704,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>**How are tweets going to look like in transaction data?**</span>
 <span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>By this point, you might be wondering how do we apply ARM to tweets that look nothing like transactions.  But in fact, itemset in transactional data does not necessarily have to be a real collection of items in someone’s checkout basket, it can take demographic features, categorical variables, or a bag of words like a tweet.  All we need to do is to tokenize each tweet and make each word an item in the itemset.  The inner relationships between the 'items' will be the correlation between words.</span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>By this point, you might be wondering how do we apply ARM to tweets that look nothing like transactions.  But in fact, itemset in transactional data does not necessarily have to be a real collection of items in someone's checkout basket, it can take demographic features, categorical variables, or a bag of words like a tweet.  All we need to do is to tokenize each tweet and make each word an item in the itemset.  The inner relationships between the 'items' will be the correlation between words.</span>
 <span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a><span class="fu">### Theory</span></span>

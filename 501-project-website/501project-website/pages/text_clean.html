@@ -254,7 +254,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="read-in-the-json-files" class="level3">
 <h3 class="anchored" data-anchor-id="read-in-the-json-files">Read in the Json files</h3>
-<p>The first step is to read the JSON file that needs to be cleaned and open it with the pd.read_json() function. One good thing about the pd.read_json() function is that every JSON file opened with it automatically converts to a data frame which is more operable. I assigned the file to ‘health_insurance_df’. I created an ‘ID’ column that takes the value from 1 to the length of the data frame for later use. After adding the ‘ID’ column, we can see that the data frame consists of 6 columns, we are going to focus on the ‘text’ column for cleaning purpose.</p>
+<p>The first step is to read the JSON file that needs to be cleaned and open it with the pd.read_json() function. One good thing about the pd.read_json() function is that every JSON file opened with it automatically converts to a data frame which is more operable. I assigned the file to 'health_insurance_df'. I created an 'ID' column that takes the value from 1 to the length of the data frame for later use. After adding the 'ID' column, we can see that the data frame consists of 6 columns, we are going to focus on the 'text' column for cleaning purpose.</p>
 <div class="cell" data-execution_count="2">
 <details>
 <summary>Code</summary>
@@ -309,7 +309,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="sentiment-analysis" class="level3">
 <h3 class="anchored" data-anchor-id="sentiment-analysis">Sentiment Analysis</h3>
-<p>The next step of text data cleaning is to perform sentiment analysis for each tweet and store the outcome of each tweet as its label. Sentiment analysis is a technique that detects the underlying sentiment in a piece of text. It is the process of classifying text as either positive, negative, or neutral. Sentiment analysis is very essential to gauge customers’ or users’ responses. In the following chunks, I wrote a getSentiments() function to rate each tweet’s sentiment scores in positivity, negativity, and neutrality. I converted the result from the dictionary to a data frame ‘score’, and also added a column ‘ID’ that takes the same value as the ‘ID’ column in the health_insurance_df. Displaying the first ten rows of the score data frame, we can see that we have four columns of values to rate the corresponding sentiment and one column of ‘ID’ for later use.</p>
+<p>The next step of text data cleaning is to perform sentiment analysis for each tweet and store the outcome of each tweet as its label. Sentiment analysis is a technique that detects the underlying sentiment in a piece of text. It is the process of classifying text as either positive, negative, or neutral. Sentiment analysis is very essential to gauge 'customers' or 'users' responses. In the following chunks, I wrote a getSentiments() function to rate each tweet's sentiment scores in positivity, negativity, and neutrality. I converted the result from the dictionary to a data frame 'score', and also added a column 'ID' that takes the same value as the 'ID' column in the health_insurance_df. Displaying the first ten rows of the score data frame, we can see that we have four columns of values to rate the corresponding sentiment and one column of 'ID' for later use.</p>
 <div class="cell" data-execution_count="5">
 <details>
 <summary>Code</summary>
@@ -441,7 +441,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="filter-stopwords" class="level3">
 <h3 class="anchored" data-anchor-id="filter-stopwords">Filter Stopwords</h3>
-<p>Next, I am going to remove the stop words from the text. Stopwords are words which does not add much meaning to a sentence. They can safely be ignored without sacrificing the meaning of the sentence. For example, the words like the, I, it, etc. Such words are already captured in a corpus named corpus. We first download it to our python environment. I wrote a define function to loop through each tweet and to filter out stopwords and lowercase all the letters. Applying this function to our data frame, we can see that the ‘text’ column is now stopwords-free.</p>
+<p>Next, I am going to remove the stop words from the text. Stopwords are words which does not add much meaning to a sentence. They can safely be ignored without sacrificing the meaning of the sentence. For example, the words like the, I, it, etc. Such words are already captured in a corpus named corpus. We first download it to our python environment. I wrote a define function to loop through each tweet and to filter out stopwords and lowercase all the letters. Applying this function to our data frame, we can see that the 'text' column is now stopwords-free.</p>
 <div class="cell" data-execution_count="7">
 <details>
 <summary>Code</summary>
@@ -506,7 +506,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <th>0</th>
       <td>1579944177819070464</td>
       <td>[1579944177819070465]</td>
-      <td>loyolaramblers 𝗧𝗵𝗲 𝗥𝗮𝗺𝗯𝗹𝗲𝗿 𝗥𝗼𝘂𝗻𝗱𝘁𝗮𝗯𝗹𝗲 present ...</td>
+      <td>loyolaramblers The Rambler Roundtable present ...</td>
       <td>2022-10-11 21:17:00+00:00</td>
       <td>en</td>
       <td>1015398717392687104</td>
@@ -540,7 +540,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <th>2</th>
       <td>1579937294152519680</td>
       <td>[1579937294152519680]</td>
-      <td>peds_ortho aetna ’ doctor ’ office take copay ...</td>
+      <td>peds_ortho aetna ' doctor ' office take copay ...</td>
       <td>2022-10-11 20:49:39+00:00</td>
       <td>en</td>
       <td>1228846428929380352</td>
@@ -574,7 +574,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <th>4</th>
       <td>1579932311864238080</td>
       <td>[1579932311864238080]</td>
-      <td>peds_ortho aetna pay copay meet oop limit ’ pa...</td>
+      <td>peds_ortho aetna pay copay meet oop limit ' pa...</td>
       <td>2022-10-11 20:29:51+00:00</td>
       <td>en</td>
       <td>1228846428929380352</td>
@@ -595,7 +595,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="tidy-dataframe" class="level3">
 <h3 class="anchored" data-anchor-id="tidy-dataframe">Tidy Dataframe</h3>
-<p>After inner joining the score data with the health_insurance_df data so that each tweet in the health_insurance data frame will have corresponding sentiment scores, the basic Text cleaning was done. Now we’re going to finish up our data frame by renaming columns to more intuitive names, casting the data type, and adding a column to display the label of the tweet sentiment.</p>
+<p>After inner joining the score data with the health_insurance_df data so that each tweet in the health_insurance data frame will have corresponding sentiment scores, the basic Text cleaning was done. Now we're going to finish up our data frame by renaming columns to more intuitive names, casting the data type, and adding a column to display the label of the tweet sentiment.</p>
 <div class="cell" data-execution_count="9">
 <details>
 <summary>Code</summary>
@@ -624,7 +624,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <tbody>
     <tr>
       <th>0</th>
-      <td>loyolaramblers 𝗧𝗵𝗲 𝗥𝗮𝗺𝗯𝗹𝗲𝗿 𝗥𝗼𝘂𝗻𝗱𝘁𝗮𝗯𝗹𝗲 present ...</td>
+      <td>loyolaramblers The Rambler Roundtable present ...</td>
       <td>2022-10-11</td>
       <td>en</td>
       <td>Aetna</td>
@@ -644,7 +644,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </tr>
     <tr>
       <th>2</th>
-      <td>peds_ortho aetna ’ doctor ’ office take copay ...</td>
+      <td>peds_ortho aetna ' doctor ' office take copay ...</td>
       <td>2022-10-11</td>
       <td>en</td>
       <td>Aetna</td>
@@ -664,7 +664,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </tr>
     <tr>
       <th>4</th>
-      <td>peds_ortho aetna pay copay meet oop limit ’ pa...</td>
+      <td>peds_ortho aetna pay copay meet oop limit ' pa...</td>
       <td>2022-10-11</td>
       <td>en</td>
       <td>Aetna</td>
@@ -680,7 +680,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="vectorization" class="level3">
 <h3 class="anchored" data-anchor-id="vectorization">Vectorization</h3>
-<p>In programming, a vector is a data structure that is similar to a list or an array. For the purpose of an input representation, it is simply a succession of values, with the number of values representing the vector’s “dimensionality.” Text Vectorization is the process of converting text into a numerical representation. I extracted the text from each tweet and save them both to a string for word cloud and to a list for vectorizing. Using the CountVectorizer() function from the sklearn library, we can convert the corpus to a dense matrix. I transformed the matrix to a data frame in which each column takes a word. This gives us a 300 x 1026 huge data frame.</p>
+<p>In programming, a vector is a data structure that is similar to a list or an array. For the purpose of an input representation, it is simply a succession of values, with the number of values representing the vector's 'dimensionality'. Text Vectorization is the process of converting text into a numerical representation. I extracted the text from each tweet and save them both to a string for word cloud and to a list for vectorizing. Using the CountVectorizer() function from the sklearn library, we can convert the corpus to a dense matrix. I transformed the matrix to a data frame in which each column takes a word. This gives us a 300 x 1026 huge data frame.</p>
 <div class="cell" data-execution_count="10">
 <details>
 <summary>Code</summary>
@@ -727,9 +727,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <th>zero</th>
       <th>zoryalondonsk</th>
       <th>zwsyhywsgy</th>
-      <th>𝗥𝗮𝗺𝗯𝗹𝗲𝗿</th>
-      <th>𝗥𝗼𝘂𝗻𝗱𝘁𝗮𝗯𝗹𝗲</th>
-      <th>𝗧𝗵𝗲</th>
+      <th>Rambler</th>
+      <th>Roundtable</th>
+      <th>The</th>
       <th>label</th>
     </tr>
   </thead>
@@ -856,7 +856,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </tr>
   </tbody>
 </table>
-<p>5 rows × 2162 columns</p>
+<p>5 rows x 2162 columns</p>
 </div>
 </div>
 </div>
@@ -1181,7 +1181,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-95"><a href="#cb14-95" aria-hidden="true" tabindex="-1"></a><span class="fu">### Sentiment Analysis</span></span>
 <span id="cb14-96"><a href="#cb14-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-97"><a href="#cb14-97" aria-hidden="true" tabindex="-1"></a>The next step of text data cleaning is to perform sentiment analysis for each tweet and store the outcome of each tweet as its label. Sentiment analysis is a technique that detects the underlying sentiment in a piece of text. It is the process of classifying text as either positive, negative, or neutral. Sentiment analysis is very essential to gauge customers’ or users’ responses. In the following chunks, I wrote a getSentiments() function to rate each tweet’s sentiment scores in positivity, negativity, and neutrality. I converted the result from the dictionary to a data frame 'score', and also added a column 'ID' that takes the same value as the 'ID' column in the health_insurance_df. Displaying the first ten rows of the score data frame, we can see that we have four columns of values to rate the corresponding sentiment and one column of 'ID' for later use.</span>
+<span id="cb14-97"><a href="#cb14-97" aria-hidden="true" tabindex="-1"></a>The next step of text data cleaning is to perform sentiment analysis for each tweet and store the outcome of each tweet as its label. Sentiment analysis is a technique that detects the underlying sentiment in a piece of text. It is the process of classifying text as either positive, negative, or neutral. Sentiment analysis is very essential to gauge customers' or users' responses. In the following chunks, I wrote a getSentiments() function to rate each tweet's sentiment scores in positivity, negativity, and neutrality. I converted the result from the dictionary to a data frame 'score', and also added a column 'ID' that takes the same value as the 'ID' column in the health_insurance_df. Displaying the first ten rows of the score data frame, we can see that we have four columns of values to rate the corresponding sentiment and one column of 'ID' for later use.</span>
 <span id="cb14-98"><a href="#cb14-98" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-101"><a href="#cb14-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb14-102"><a href="#cb14-102" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> getSentiments(df):</span>
@@ -1255,7 +1255,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-179"><a href="#cb14-179" aria-hidden="true" tabindex="-1"></a><span class="fu">### Vectorization</span></span>
 <span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a>In programming, a vector is a data structure that is similar to a list or an array. For the purpose of an input representation, it is simply a succession of values, with the number of values representing the vector’s “dimensionality.” Text Vectorization is the process of converting text into a numerical representation. I extracted the text from each tweet and save them both to a string for word cloud and to a list for vectorizing. Using the CountVectorizer() function from the sklearn library, we can convert the corpus to a dense matrix. I transformed the matrix to a data frame in which each column takes a word. This gives us a 300 x 1026 huge data frame.</span>
+<span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a>In programming, a vector is a data structure that is similar to a list or an array. For the purpose of an input representation, it is simply a succession of values, with the number of values representing the vector's “dimensionality.” Text Vectorization is the process of converting text into a numerical representation. I extracted the text from each tweet and save them both to a string for word cloud and to a list for vectorizing. Using the CountVectorizer() function from the sklearn library, we can convert the corpus to a dense matrix. I transformed the matrix to a data frame in which each column takes a word. This gives us a 300 x 1026 huge data frame.</span>
 <span id="cb14-182"><a href="#cb14-182" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-185"><a href="#cb14-185" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb14-186"><a href="#cb14-186" aria-hidden="true" tabindex="-1"></a>corpus_str <span class="op">=</span> <span class="st">""</span></span>

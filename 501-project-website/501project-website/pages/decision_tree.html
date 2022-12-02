@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+  
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="../index.html">ANLY501</a>
@@ -227,7 +228,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="methods" class="level3">
 <h3 class="anchored" data-anchor-id="methods">Methods</h3>
-<p>A tree has many analogies in real life, and it turns out that it has influenced a wide area of machine learning, covering both classification and regression. In decision analysis, a decision tree can be used to visually and explicitly represent decisions and decision making. As the name goes, it uses a tree-like model of decisions. Before jumping into a simple example, let’s first take a look at some important terminologies in Decision Tree algorithm.</p>
+<p>A tree has many analogies in real life, and it turns out that it has influenced a wide area of machine learning, covering both classification and regression. In decision analysis, a decision tree can be used to visually and explicitly represent decisions and decision making. As the name goes, it uses a tree-like model of decisions. Before jumping into a simple example, let's first take a look at some important terminologies in Decision Tree algorithm.</p>
 <table class="table">
 <thead>
 <tr class="header">
@@ -266,7 +267,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </table>
 <p>Cheat-Sheet: DT terminologies:</p>
 <p><strong>How can an algorithm be represented as a tree</strong></p>
-<p>For this let’s consider a very basic example that predicting whether a student will get an A in ANLY501. Below model uses 3 features/attributes/columns, namely desire, attendence and time spent weekly(20hrs). A decision tree is drawn upside down with its root at the top. In this image, the text in black represents a condition/internal <strong>node</strong>, based on which the tree splits into <strong>branches/ edges</strong>. The end of the branch that doesn’t split anymore is the decision/<strong>leaf</strong>, in this case, whether the student get an A or not is represented as text respectively.</p>
+<p>For this let's consider a very basic example that predicting whether a student will get an A in ANLY501. Below model uses 3 features/attributes/columns, namely desire, attendence and time spent weekly(20hrs). A decision tree is drawn upside down with its root at the top. In this image, the text in black represents a condition/internal <strong>node</strong>, based on which the tree splits into <strong>branches/ edges</strong>. The end of the branch that doesn't split anymore is the decision/<strong>leaf</strong>, in this case, whether the student get an A or not is represented as text respectively.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -288,8 +289,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <p><strong>What is actually going on in the background?</strong></p>
-<p>A real dataset will have a lot more features and the above example will just be a branch in a much bigger tree, but we can’t ignore the simplicity of this algorithm. The feature importance is clear and relations can be viewed easily. This methodology is more commonly known as learning decision tree from data and above tree is called Classification tree as the target is to classify student as getting an A or not.</p>
-<p>Decision tree learning or growing a tree involves deciding on which features to choose and what conditions to use for splitting, along with knowing when to stop. As mentioned above, a decision tree is composed of nodes, and those nodes are chosen looking for the optimum split of the features. For that purpose, different criteria exist. In the decision tree Python implementation of the scikit-learn library, this is made by the parameter ’criterion‘. This parameter is the function used to measure the quality of a split and it allows users to choose between <strong>’gini‘</strong> or <strong>’entropy‘</strong>.</p>
+<p>A real dataset will have a lot more features and the above example will just be a branch in a much bigger tree, but we can't ignore the simplicity of this algorithm. The feature importance is clear and relations can be viewed easily. This methodology is more commonly known as learning decision tree from data and above tree is called Classification tree as the target is to classify student as getting an A or not.</p>
+<p>Decision tree learning or growing a tree involves deciding on which features to choose and what conditions to use for splitting, along with knowing when to stop. As mentioned above, a decision tree is composed of nodes, and those nodes are chosen looking for the optimum split of the features. For that purpose, different criteria exist. In the decision tree Python implementation of the scikit-learn library, this is made by the parameter 'criterion'. This parameter is the function used to measure the quality of a split and it allows users to choose between <strong>'gini'</strong> or <strong>'entropy'</strong>.</p>
 <p><strong>-Gini Index</strong></p>
 <p>The gini impurity is calculated using the following formula:</p>
 <p><span class="math display">\[ GiniIndex = 1 - \sum_{j}p^2_{j}
@@ -304,7 +305,7 @@ Where, as before, <span class="math inline">\(p_{j}\)</span> is the probability 
 </section>
 <section id="class-distribution" class="level3">
 <h3 class="anchored" data-anchor-id="class-distribution">Class distribution</h3>
-<p>Now let us come back to our reord dataset and implement the Decision Tree algorithm on it to classify the outcome variable – Health Index. Since the outcome variable health index is a continuous variable which takes value from 0-100 and also since we want to do a classficication instead of a regression here, I binned the column to multiple classes and assign them with a label. The following table shows the range, count and ratio of each label：</p>
+<p>Now let us come back to our reord dataset and implement the Decision Tree algorithm on it to classify the outcome variable - Health Index. Since the outcome variable health index is a continuous variable which takes value from 0-100 and also since we want to do a classficication instead of a regression here, I binned the column to multiple classes and assign them with a label. The following table shows the range, count and ratio of each label: </p>
 <table class="table">
 <thead>
 <tr class="header">
@@ -487,14 +488,14 @@ TEST SHAPES: (767, 11) (767,)</code></pre>
 </section>
 <section id="hyperparameter-tuning" class="level2">
 <h2 class="anchored" data-anchor-id="hyperparameter-tuning">Hyperparameter Tuning</h2>
-<p>Hyperparameter tuning consists of finding a set of optimal hyperparameter values for a learning algorithm while applying this optimized algorithm to any data set. That combination of hyperparameters maximizes the model’s performance, minimizing a predefined loss function to produce better results with fewer errors. In this section, I am going to tune max_depth, min_sample_split and criterion parameter.</p>
+<p>Hyperparameter tuning consists of finding a set of optimal hyperparameter values for a learning algorithm while applying this optimized algorithm to any data set. That combination of hyperparameters maximizes the model's performance, minimizing a predefined loss function to produce better results with fewer errors. In this section, I am going to tune max_depth, min_sample_split and criterion parameter.</p>
 <p><strong>Max_depth Tuning:</strong></p>
 <p>The first hyperparameter to tune in the Decision Tree is max_depth. It indicates how deep the decision can be. The deeper the tree, the more splits it has and meanwhile captures more information about the data. However, in general a decision tree overfits for large depth values. When the tree perfectly predicts all the training data, it failes to generalize the findings on new data.</p>
 <p><strong>Min_sample_split Tuning</strong></p>
 <p>The hyperparameter min_sample_split is used to set the minimum number of samples required to split an internal node. This can vary between two extremes, i.e., considering only one sample at each node vs.&nbsp;considering all of the samples at each node - for a given attribute.</p>
 <p><strong>Note</strong>: max_depth and min_samples_split are also both related to the computational cost involved with growing the tree. Large values for these parameters can create complex, dense, and long trees. For large datasets, it may become extremely time-consuming to use default values.</p>
 <p><strong>Criterion</strong></p>
-<p>Supported Criterion are ‘Gini’ and ‘Entropy’.</p>
+<p>Supported Criterion are 'Gini' and 'Entropy'.</p>
 <div class="cell" data-execution_count="8">
 <details>
 <summary>Code</summary>
@@ -875,8 +876,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>**How can an algorithm be represented as a tree**  </span>
 <span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>For this let’s consider a very basic example that predicting whether a student will get an A in ANLY501. Below model uses 3 features/attributes/columns, namely desire, attendence and  time spent weekly(20hrs).</span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>A decision tree is drawn upside down with its root at the top. In this image, the text in black represents a condition/internal **node**, based on which the tree splits into **branches/ edges**. The end of the branch that doesn’t split anymore is the decision/**leaf**, in this case, whether the student get an A or not is represented as text respectively.</span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>For this let's consider a very basic example that predicting whether a student will get an A in ANLY501. Below model uses 3 features/attributes/columns, namely desire, attendence and  time spent weekly(20hrs).</span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>A decision tree is drawn upside down with its root at the top. In this image, the text in black represents a condition/internal **node**, based on which the tree splits into **branches/ edges**. The end of the branch that doesn't split anymore is the decision/**leaf**, in this case, whether the student get an A or not is represented as text respectively.</span>
 <span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
 <span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>flowchart TD</span>
@@ -890,9 +891,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a><span class="in">```</span>  </span>
 <span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>**What is actually going on in the background?** </span>
 <span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>A real dataset will have a lot more features and the above example will just be a branch in a much bigger tree, but we can’t ignore the simplicity of this algorithm. The feature importance is clear and relations can be viewed easily. This methodology is more commonly known as learning decision tree from data and above tree is called Classification tree as the target is to classify student as getting an A or not.</span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>A real dataset will have a lot more features and the above example will just be a branch in a much bigger tree, but we can't ignore the simplicity of this algorithm. The feature importance is clear and relations can be viewed easily. This methodology is more commonly known as learning decision tree from data and above tree is called Classification tree as the target is to classify student as getting an A or not.</span>
 <span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>Decision tree learning or growing a tree involves deciding on which features to choose and what conditions to use for splitting, along with knowing when to stop. As mentioned above, a decision tree is composed of nodes, and those nodes are chosen looking for the optimum split of the features. For that purpose, different criteria exist. In the decision tree Python implementation of the scikit-learn library, this is made by the parameter ‘criterion‘. This parameter is the function used to measure the quality of a split and it allows users to choose between **‘gini‘** or **‘entropy‘**.</span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>Decision tree learning or growing a tree involves deciding on which features to choose and what conditions to use for splitting, along with knowing when to stop. As mentioned above, a decision tree is composed of nodes, and those nodes are chosen looking for the optimum split of the features. For that purpose, different criteria exist. In the decision tree Python implementation of the scikit-learn library, this is made by the parameter 'criterion'. This parameter is the function used to measure the quality of a split and it allows users to choose between **'gini'** or **'entropy'**.</span>
 <span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a>**-Gini Index**  </span>
 <span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a></span>

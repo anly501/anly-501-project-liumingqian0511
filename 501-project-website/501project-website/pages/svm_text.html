@@ -224,14 +224,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="method" class="level3">
 <h3 class="anchored" data-anchor-id="method">Method</h3>
 <p><strong>What is Support Vector Machines?</strong></p>
-<p>A support vector machine (SVM) is a supervised machine learning model that uses classification algorithms for two-group classification problems. After giving an SVM model sets of labeled training data for each category, they’re able to categorize new text.</p>
-<p>Compared to newer algorithms like neural networks, they have two main advantages: higher speed and better performance with a limited number of samples (in the thousands). This makes the algorithm very suitable for text classification problems, where it’s common to have access to a dataset of at most a couple of thousands of tagged samples.</p>
+<p>A support vector machine (SVM) is a supervised machine learning model that uses classification algorithms for two-group classification problems. After giving an SVM model sets of labeled training data for each category, they're able to categorize new text.</p>
+<p>Compared to newer algorithms like neural networks, they have two main advantages: higher speed and better performance with a limited number of samples (in the thousands). This makes the algorithm very suitable for text classification problems, where it's common to have access to a dataset of at most a couple of thousands of tagged samples.</p>
 <p><strong>How Does SVM Work?</strong></p>
-<p>The basics of Support Vector Machines and how it works are best understood with a simple example. Let’s imagine we have two tags: red and blue, and our data has two features: x and y. We want a classifier that, given a pair of (x,y) coordinates, outputs if it’s either red or blue. We plot our already labeled training data on a plane:<br>
+<p>The basics of Support Vector Machines and how it works are best understood with a simple example. Let's imagine we have two tags: red and blue, and our data has two features: x and y. We want a classifier that, given a pair of (x,y) coordinates, outputs if it's either red or blue. We plot our already labeled training data on a plane:<br>
 <img src="labeled.png" class="img-fluid" alt="Our labeled data"></p>
-<p>A support vector machine takes these data points and outputs the hyperplane (which in two dimensions it’s simply a line) that best separates the tags. This line is the decision boundary: anything that falls to one side of it we will classify as blue, and anything that falls to the other as red.<br>
+<p>A support vector machine takes these data points and outputs the hyperplane (which in two dimensions it's simply a line) that best separates the tags. This line is the decision boundary: anything that falls to one side of it we will classify as blue, and anything that falls to the other as red.<br>
 <img src="2D.png" class="img-fluid" alt="In 2D, the best hyperplane is simply a line"></p>
-<p>But, what exactly is the best hyperplane? For SVM, it’s the one that maximizes the margins from both tags. In other words: the hyperplane (remember it’s a line in this case) whose distance to the nearest element of each tag is the largest.</p>
+<p>But, what exactly is the best hyperplane? For SVM, it's the one that maximizes the margins from both tags. In other words: the hyperplane (remember it's a line in this case) whose distance to the nearest element of each tag is the largest.</p>
 <div class="cell" data-execution_count="1">
 <details>
 <summary>Code</summary>
@@ -421,7 +421,7 @@ Testing accuracy is:  0.9259259259259259</code></pre>
 <ul>
 <li>Gamma Tuning</li>
 </ul>
-<p>The gamma parameter defines how far the influence of a single training example reaches, with low values meaning ‘far’ and high values meaning ‘close’. In other words, with low gamma, points far away from plausible seperation line are considered in calculation for the seperation line. Where as high gamma means the points close to plausible line are considered in calculation. After tuning, we found that the optimized gamma for our model is 0.01.</p>
+<p>The gamma parameter defines how far the influence of a single training example reaches, with low values meaning 'far' and high values meaning 'close'. In other words, with low gamma, points far away from plausible seperation line are considered in calculation for the seperation line. Where as high gamma means the points close to plausible line are considered in calculation. After tuning, we found that the optimized gamma for our model is 0.01.</p>
 <div class="cell" data-execution_count="10">
 <details>
 <summary>Code</summary>
@@ -824,19 +824,19 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>**What is Support Vector Machines?**</span>
 <span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>A support vector machine (SVM) is a supervised machine learning model that uses classification algorithms for two-group classification problems. After giving an SVM model sets of labeled training data for each category, they’re able to categorize new text.</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>A support vector machine (SVM) is a supervised machine learning model that uses classification algorithms for two-group classification problems. After giving an SVM model sets of labeled training data for each category, they're able to categorize new text.</span>
 <span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>Compared to newer algorithms like neural networks, they have two main advantages: higher speed and better performance with a limited number of samples (in the thousands). This makes the algorithm very suitable for text classification problems, where it’s common to have access to a dataset of at most a couple of thousands of tagged samples.</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>Compared to newer algorithms like neural networks, they have two main advantages: higher speed and better performance with a limited number of samples (in the thousands). This makes the algorithm very suitable for text classification problems, where it's common to have access to a dataset of at most a couple of thousands of tagged samples.</span>
 <span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>**How Does SVM Work?**  </span>
 <span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>The basics of Support Vector Machines and how it works are best understood with a simple example. Let’s imagine we have two tags: red and blue, and our data has two features: x and y. We want a classifier that, given a pair of (x,y) coordinates, outputs if it’s either red or blue. We plot our already labeled training data on a plane:  </span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>The basics of Support Vector Machines and how it works are best understood with a simple example. Let's imagine we have two tags: red and blue, and our data has two features: x and y. We want a classifier that, given a pair of (x,y) coordinates, outputs if it's either red or blue. We plot our already labeled training data on a plane:  </span>
 <span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a><span class="al">![Our labeled data](labeled.png)</span></span>
 <span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>A support vector machine takes these data points and outputs the hyperplane (which in two dimensions it’s simply a line) that best separates the tags. This line is the decision boundary: anything that falls to one side of it we will classify as blue, and anything that falls to the other as red.  </span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>A support vector machine takes these data points and outputs the hyperplane (which in two dimensions it's simply a line) that best separates the tags. This line is the decision boundary: anything that falls to one side of it we will classify as blue, and anything that falls to the other as red.  </span>
 <span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a><span class="al">![In 2D, the best hyperplane is simply a line](2D.png)</span></span>
 <span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>But, what exactly is the best hyperplane? For SVM, it’s the one that maximizes the margins from both tags. In other words: the hyperplane (remember it's a line in this case) whose distance to the nearest element of each tag is the largest.</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>But, what exactly is the best hyperplane? For SVM, it's the one that maximizes the margins from both tags. In other words: the hyperplane (remember it's a line in this case) whose distance to the nearest element of each tag is the largest.</span>
 <span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
