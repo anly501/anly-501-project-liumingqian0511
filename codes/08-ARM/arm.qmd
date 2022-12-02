@@ -1,0 +1,213 @@
+---
+jupyter: python3
+title: "Association Rule Mining"
+date: "11/29/2022"
+pdf-engine: lualatex
+format:
+  html:
+    theme : Minty
+    toc: true
+    code-tools: true
+    code-fold: true
+    code-summary: "Code"
+    toc-title: Contents
+execute:
+    warning: false
+---
+
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from apyori import apriori
+import networkx as nx 
+from sklearn.feature_selection import VarianceThreshold
+from sklearn.preprocessing import StandardScaler
+from nltk.tokenize import word_tokenize
+```
+
+### Introduction
+
+In this section, I am going to apply association rule mining (ARM) on the modified text data and utilize the apriori algorithm to generate rules that are significant in support, confidence, and lift level.  Remember that the text data was gathered from the Twitter API using four different health insurance brands as the hashtag, and each data is a tweet from a user.  The variables in this dataset include text(tweet), author, date, label, etc.  ARM will be employed only on the text variable and rules will be generated based on the tokenized word in each tweet.  The result of an ARM can discover the inner relations between the words in a tweet.  For example, we may find out a rule says that if someone mentioned the word "health" and "disease" in a tweet, he/she will very likely mention "insurance" as well.  ARM has demonstrated critical analytical importance in many areas because its rules can help the market implement better policies.  However, in this project, since the initial data was not collected for Market Basket Analysis, the application of ARM will be more for practice, and the final rules may be less informative and meaningful. 
+
+**What is a transaction data?**  
+
+Transactional data is information that is captured from transactions. It records the time of the transaction, the place where it occurred, the price points of the items bought, the payment method employed, discounts if any, and other quantities and qualities associated with the transaction. An example of a simplied transaction data is presented below. The column TID stands for the transaction ID.  
+
+| TID | ITEMS |
+| --- | --- | --- |
+| 1 | Bread, Coke, Milk |
+| 2 | Milk, Napkin, Egg |
+| 3 | Coke, Egg, Papertowel |
+| 4 | Bread, Papertowel |
+| 5 | Milk, Bread, Egg |
+
+**How are tweets going to look like in transaction data?**
+
+By this point, you might be wondering how do we apply ARM to tweets that look nothing like transactions.  But in fact, itemset in transactional data does not necessarily have to be a real collection of items in someone’s checkout basket, it can take demographic features, categorical variables, or a bag of words like a tweet.  All we need to do is to tokenize each tweet and make each word an item in the itemset.  The inner relationships between the 'items' will be the correlation between words.
+
+
+### Theory
+Association Rule is one of the most important concepts of machine learning being used in market basket analysis. Association rule mining is a rule-based machine learning method for discovering inner relationships between itemsets in large databases. It identifies frequent if-then associations called association rules which consists of an antecedent (if) and a consequent (then). Antecedent is always called the left-hand-side (LHS) and consequent is called right-hand-side (RHS). For example, in the rule "if milk and bread are purchased, then egg would also be bought by the customer", milk and bread will be the left-hand-side and egg will be the right-hand-side.
+
+**How do we determine a rule?**
+
+There are three key metrics to measure association and help us to determine a rule: support, confidence, and lift. 
+
+- Support
+
+Within a dataset, how likely the transactions contain item A will be the support for A., so it is just the probability of item A occurring, which we can represent as below. Statistically speaking, it is a frequentist's estimate of the probability.
+
+$$Support({A}) = P(A) = \frac{Transaction\,containing\,A}{Total\,number\,of\,transactions}
+$$
+
+- Confidence
+
+Given the transactions that contains item A, how many also contains item B. The bigger the overlap, the greater the confidence we have for contomers who are buying item A also buys item B.  It is just the conditional probability of item B given item A. 
+
+$$Confidence({A}\to{B}) = P(B|A) = \frac{Transaction\,containing\,both\,A\,and\,B}{Transaction\,containing\,A}
+$$
+
+- Lift
+
+The ratio between Confidence of A and Support B. The two event are **Independent**, if $P(A \cap B) = P(A)*P(B)$. The two events are **mutually exclusive** if $P(A \cap B) = 0$. In the first case, the Lift will be 1, while in the second case, the Lift will be 0, regardless the probability of either A or B happening. Typically we only consider rules with Lift > 1, because we are looking for positive associations.
+
+
+$$Lift({A}\to{B}) = \frac{P(A\cap B)}{P(A)*P(B)}
+$$
+
+### Methods
+
+The coding workflow is quite straighforward. There are three major steps: 
+
+1. Define functions 
+
+    I defined three functions for the purpose of better revealing the results from the ARM. The first function *reformat_results()* reformats the result from apriori algorithm and stores rhs, lhs, support, confidence and lift in a data frame. The second and third function both serve for the final networking graph. 
+
+```{python}
+def reformat_results(results):
+
+    #CLEAN-UP RESULTS 
+    keep=[]
+    for i in range(0,len(results)):
+        # print("=====================================")
+        # print(results[i])
+        # print(len(list(results[i])))
+        for j in range(0,len(list(results[i]))):
+            # print(results)
+            if(j>1):
+                for k in range(0,len(list(results[i][j]))):
+                    if(len(results[i][j][k][0])!=0):
+                        #print(len(results[i][j][k][0]),results[i][j][k][0])
+                        rhs=list(results[i][j][k][0])
+                        lhs=list(results[i][j][k][1])
+                        conf=float(results[i][j][k][2])
+                        lift=float(results[i][j][k][3])
+                        keep.append([rhs,lhs,supp,conf,supp*conf,lift])
+                        # keep.append()
+            if(j==1):
+                supp=results[i][j]
+
+    return pd.DataFrame(keep, columns =["rhs","lhs","supp","conf","supp x conf","lift"])
+```
+
+```{python}
+def convert_to_network(df):
+
+    #BUILD GRAPH
+    G = nx.DiGraph()  # DIRECTED
+    for row in df.iterrows():
+        # for column in df.columns:
+        lhs="_".join(row[1][0])
+        rhs="_".join(row[1][1])
+        conf=row[1][3]; #print(conf)
+        if(lhs not in G.nodes): 
+            G.add_node(lhs)
+        if(rhs not in G.nodes): 
+            G.add_node(rhs)
+
+        edge=(lhs,rhs)
+        if edge not in G.edges:
+            G.add_edge(lhs, rhs, weight=conf)
+
+    # print(G.nodes)
+    # print(G.edges)
+    return G
+```
+
+```{python}
+def plot_network(G):
+    #SPECIFIY X-Y POSITIONS FOR PLOTTING
+    pos=nx.random_layout(G)
+
+    #GENERATE PLOT
+    fig, ax = plt.subplots()
+    fig.set_size_inches(5, 5)
+
+    #assign colors based on attributes
+    weights_e 	= [G[u][v]['weight'] for u,v in G.edges()]
+
+    #SAMPLE CMAP FOR COLORS 
+    cmap=plt.cm.get_cmap('Blues')
+    colors_e 	= [cmap(G[u][v]['weight']/5.0) for u,v in G.edges()]
+
+    #PLOT
+    nx.draw(
+    G,
+    edgecolors="black",
+    edge_color=colors_e,
+    node_size=2000,
+    linewidths=2,
+    font_size=8,
+    font_color="white",
+    font_weight="bold",
+    width=weights_e,
+    with_labels=True,
+    pos=pos,
+    ax=ax
+    )
+    ax.set(title='Color and size plotted by attribute')
+    # ax.set_aspect('equal', 'box')
+    # plt.colorbar(cmap)
+
+    # fig.savefig("test.png")
+    plt.show()
+```
+
+2. Convert text to transaction 
+
+    As I mentioned above, our text data was not gathered for market basket analysis. Thus, we need to do some operations and make it look a transaction data. I kept only the text (tweet) column from the original data and tokenized it by word. The output is saved to a list called transaction, which stores lists of tokenized tweets. 
+
+```{python}
+data = pd.read_csv('/Users/liumingqian/anly-501-project-liumingqian0511/data/01-modified-data/text.csv')
+data = data['text']
+transactions= [word_tokenize(data[i]) for i in range(len(data))]
+```
+
+3. Print Result
+
+    Lastly, I used apriori algorithm to generate association rules and reformated the results using the *reformat_result* function. Also, I ploted the networking graph based on the rules.
+
+### Results
+
+The major hyperparameters for apriori algorithm include min_support, min_confidence, min_lift. A greater value of these thresholds will limit the number of rules that are generalized. After manually tuning the min_support and min_confidence by setting them to really small values, we ended up having 26 rules in total. However, I found that many rules include only "#" sign in either LHS or RHS and I decided to remove those rules because they are not informative. This left us 10 association rules eventually.
+```{python}
+print("Transactions:",pd.DataFrame(transactions).head())
+results = list(apriori(transactions, min_support=0.05, min_confidence=0.05, min_length=1, min_lift=0, max_length=10))     #RUN APRIORI ALGORITHM
+pd_results=reformat_results(results)
+print(pd_results.shape)
+```
+
+The printed data frame below is the finalized rules after removing the not informative ones. We can see that all the rules have low support levels which is suggesting that the itemsets are not common overall. The highest support happens to the itemset {group, united} which is around 0.1. This means tweets that contain the word 'group' and 'UnitedHealth' accounted for only 10 percent of all tweets. The confidence level for this rule is also the highest among all rules, which is 0.89. This means among all the tweets with the word 'group', there is a 90% chance to have the word 'UnitedHealth' also occur. The second high-support and high-confidence rule is {national, anthem}. The probability of tweets with both words to occur is around 6% and among all tweets with the "national" in it, there is an 89% chance to have the word "anthem" also occur. By looking at the networking plot, I find that there are more rules associated with the word "group" than other words.
+
+```{python}
+result_df = pd_results.iloc[[12,13,14,15,18,19,21,22,23,24],:] 
+print("Results\n",result_df)
+G=convert_to_network(result_df)
+plot_network(G)
+```
+
+### Conclusion
+
+Once again, this section is more for me to practice the use of ARM because the data I am using is not so applicable to this analysis.  ARM performs better in very large data sets because its core algorithm uses probability.  Larger samples will provide more generalized and more accurate rules.  Unfortunately, the data we used was less than 300 tweets and they had been assigned labels beforehand.  However, ARM can play a good role in analyzing the relationship between text, and its results can also be very meaningful.  If we didn't assign labels to every tweet beforehand, and only kept the rule that the right-hand side was a word related to an insurance brand, like "unitedhealth", then the generalized rules would offer keywords for different brands of insurance.  These keywords may reflect the quality, user experience, benefits, disadvantages, and so on of the brand insurance.  This will help brands to upgrade their products in a more targeted and accurate way.  Although we have not generated practical and meaningful rules on the current data, the efficiency and usefulness of ARM for text data are undeniable. 

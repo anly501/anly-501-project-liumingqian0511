@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="../index.html">ANLY501</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/anly501/anly-501-project-liumingqian0511/tree/main/codes">Code</a>
+          </li>
+          <!-- Introduction -->
+          <li class="nav-item">
+            <a class="nav-link" href="./introduction00.html">Introduction</a>
+          </li>
+          <!-- Data Gathering -->
+          <li class="nav-item">
+            <a class="nav-link" href="./text_gather.html">Data Gathering</a>
+          </li>
+          <!-- Record Data -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Record Data</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="./record_data_cleaning.html">Cleaning</a>
+              <a class="dropdown-item" href="./Record_Data_Exploring.html">Exploring</a>
+            </div>
+          </li>
+          <!-- Text Data -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Text Data</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="./text_clean.html">Cleaning</a>
+              <a class="dropdown-item" href="./text_data_explore.html">Exploring</a>
+            </div>
+          </li>
+          <!-- NB -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Naive Bayes</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="./record_NB.html">Record data</a>
+              <a class="dropdown-item" href="./textNB.html">Text data</a>
+            </div>
+          </li>
+          <!-- Classification -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Classification</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="./decision_tree.html">Decision Tree</a>
+              <a class="dropdown-item" href="./svm_text.html">SVM</a>
+            </div>
+          </li>
+          <!-- Clustering -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Clustering</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="./intro_cluster.html">Intro & Theory</a>
+              <a class="dropdown-item" href="./Methods_page.html">Method & Result</a>
+              <a class="dropdown-item" href="./Conlusion.html">Conclusion</a>
+            </div>
+          </li>
+          <!-- ARM -->
+          <li class="nav-item">
+            <a class="nav-link" href="./arm.html">ARM</a>
+          </li>
+          <!-- Conclusion -->
+          <li class="nav-item">
+            <a class="nav-link" href="./conclusion00.html">Conclusion</a>
+          </li>
+          <!-- Data -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Data</a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Raw</a>
+              <a class="dropdown-item" href="#">Modified</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.251">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2022-11-30">
+
+<title>Introduction</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="introduction00_files/libs/clipboard/clipboard.min.js"></script>
+<script src="introduction00_files/libs/quarto-html/quarto.js"></script>
+<script src="introduction00_files/libs/quarto-html/popper.min.js"></script>
+<script src="introduction00_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="introduction00_files/libs/quarto-html/anchor.min.js"></script>
+<link href="introduction00_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="introduction00_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="introduction00_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="introduction00_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="introduction00_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introduction</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 30, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<p>This is a semester-long project from one of the most stressful classes in my first semester of graduate school. In this project, I explored new data science knowledge and applied it to multiple analyses using different tools. From topic selection, and data collection, to the actual application of various machine learning models, this project will answer a series of data science questions targeting the data and drawing practical conclusions that integrate with the real world. The topic I chose for this project is medical insurance and its impact on individual health. As reported by Investopedia in 2021, the United States continues to rank highest in healthcare spending among the developed nations of the world. According to data released by the Organisation for Economic Co-operation and Development (OECD) in 2019, the U.S. rate was a staggering $11,072 per capita. This statistic reflects the importance of health insurance in the United States and the industry’s size. However, many people believe that such high spending on health insurance was due to the Affordable Care Act (ACA) which required Americans to buy health insurance. The idea behind that is that government-mandated health insurance might yield a health dividend. In addition, good health insurance can be costly. Many health insurance buyers were inevitably purchasing their insurance without knowing its significance, or even reluctant to get one. These situations made me want an in-depth understanding of the medical insurance industry and its relationship with users.</p>
+<p>I will try to answer the following data science questions, some of which are about the data itself and some of which are about the possible outcomes of the model. If the following questions cannot be answered by subsequent analysis, I will summarize the reasons why they cannot be answered.</p>
+<p><strong>Data Science Questions:</strong></p>
+<ol type="1">
+<li>Whether and how much healthcare use falls when the price of healthcare goes up?</li>
+<li>Whether more expensive health insurance coverage cause better health?</li>
+<li>Whether different types of insurance (free, coinsurance, catastrophic, Deductible, etc) affect health differently?</li>
+<li>Does the level of education affect healthcare use?</li>
+<li>Do older people tend to purchase more expansive and generous insurance plans?</li>
+<li>Does a better HI plan increase face-to-face visits and hospital admissions?</li>
+<li>How does the medical insurance industry affect U.S. revenue?</li>
+<li>Whether and how much does health insurance impact individual mental health?</li>
+<li>What type of insurance are people most willing to purchase? (Car, Property, Health, Business, etc)</li>
+<li>How does Medicare affect hospital revenue?</li>
+</ol>
+<p>It is noteworthy that since this is a semester-long project, topic selection and design of data science questions were completed in the very early stage of the semester without knowing the future requirements for this project. This leads to the possibility of later developments that deviate from the goals initially set. However, the core purpose of this project, in addition to answering the above data science questions, is to fulfill data cleaning, and visualization and successfully apply different machine learning models.</p>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

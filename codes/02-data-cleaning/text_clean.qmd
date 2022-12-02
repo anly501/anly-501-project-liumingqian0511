@@ -1,0 +1,192 @@
+---
+jupyter: python3
+title: "Text Data Cleaning"
+date: "11/29/2022"
+pdf-engine: lualatex
+format:
+  html:
+    theme : Minty
+    toc: true
+    code-tools: true
+    code-fold: true
+    code-summary: "Code"
+    toc-title: Contents
+execute:
+    warning: false
+---
+
+```{python}
+import nltk;
+from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
+import nltk
+from nltk.corpus import wordnet
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from nltk.stem import PorterStemmer
+from nltk.corpus import stopwords
+import string 
+import json
+from nltk.sentiment import SentimentIntensityAnalyzer
+import json
+import pandas as pd
+import os, json
+import glob
+from nltk.corpus import wordnet as wn
+```
+
+### Introduction
+
+This page will show you how I cleaned up the text data that I gathered from Twitter API. The cleaning of text data is very different from that of record data. The goal of text data cleanup is to make raw text standardized and uniform in format for later analysis. The text data to be cleaned on this page is gathered from Twitter API. So each unit in the data is a tweet posted by the user.
+
+### Read in the Json files
+
+The first step is to read the JSON file that needs to be cleaned and open it with the pd.read_json() function. One good thing about the pd.read_json() function is that every JSON file opened with it automatically converts to a data frame which is more operable. I assigned the file to 'health_insurance_df'. I created an 'ID' column that takes the value from 1 to the length of the data frame for later use. After adding the 'ID' column, we can see that the data frame consists of 6 columns, we are going to focus on the 'text' column for cleaning purpose.
+
+```{python}
+#path_to_json = '/Users/liumingqian/anly-501-project-liumingqian0511/data/00-raw-data/twitter_data/'
+def readFiles(path):
+    json_pattern = os.path.join(path,'*.json')
+    file_list = glob.glob(json_pattern)
+    df = pd.read_json(file_list[0]) # an empty list to store the data frames
+    #print(df.head())
+    for file in file_list[1:]:
+        data = pd.read_json(file) # read data frame from json file
+        #print(data.head())
+        df = pd.concat([df,data],axis=0, ignore_index=True) # append the data frame to the list
+
+    #df = pd.concat(dfs,sort=False) # concatenate all the data frames in the list.
+    return df
+df = readFiles('/Users/liumingqian/anly-501-project-liumingqian0511/data/00-raw-data/insurance_co')
+df.drop_duplicates(subset = 'text', inplace = True)
+```
+
+```{python}
+df1 = pd.read_json('/Users/liumingqian/anly-501-project-liumingqian0511/data/00-raw-data/insurance_co/Aetna.json')
+df2 = pd.read_json('/Users/liumingqian/anly-501-project-liumingqian0511/data/00-raw-data/insurance_co/Anthem.json')
+df3 = pd.read_json('/Users/liumingqian/anly-501-project-liumingqian0511/data/00-raw-data/insurance_co/Cigna.json')
+df4 = pd.read_json('/Users/liumingqian/anly-501-project-liumingqian0511/data/00-raw-data/insurance_co/Humana.json')
+df5 = pd.read_json('/Users/liumingqian/anly-501-project-liumingqian0511/data/00-raw-data/insurance_co/UnitedHealth.json')
+```
+
+### Assign Labels Manually
+
+```{python}
+df1['label'] = 'Aetna'
+df2['label'] = 'Anthem'
+df3['label'] = 'Cigna'
+df4['label'] = 'Humana'
+df5['label'] = 'UnitedHealth'
+
+df = pd.concat([df1,df2,df3,df4,df5],ignore_index=True)
+df.drop_duplicates(subset='text',inplace = True)
+df = df[df['lang'] == 'en']
+df.shape
+```
+
+### Sentiment Analysis
+
+The next step of text data cleaning is to perform sentiment analysis for each tweet and store the outcome of each tweet as its label. Sentiment analysis is a technique that detects the underlying sentiment in a piece of text. It is the process of classifying text as either positive, negative, or neutral. Sentiment analysis is very essential to gauge customers’ or users’ responses. In the following chunks, I wrote a getSentiments() function to rate each tweet’s sentiment scores in positivity, negativity, and neutrality. I converted the result from the dictionary to a data frame 'score', and also added a column 'ID' that takes the same value as the 'ID' column in the health_insurance_df. Displaying the first ten rows of the score data frame, we can see that we have four columns of values to rate the corresponding sentiment and one column of 'ID' for later use.
+
+```{python}
+def getSentiments(df):
+    sia = SentimentIntensityAnalyzer()
+    tweet_str = ""
+    tweetscore = []
+    for tweet in df['text']:
+        tweet_str = tweet_str + " " + tweet
+        score = sia.polarity_scores(tweet_str)
+        tweetscore.append(score)
+    return tweetscore
+
+sentiment = getSentiments(df)
+score = pd.DataFrame.from_dict(sentiment)
+score = score.assign(ID = list(range(1,len(score)+1)))
+score.head(10)
+```
+
+```{python}
+df = df.assign(ID = list(range(1,len(df)+1)))
+df = df.merge(score,how='inner')
+df['sentiment'] =df[['neg','neu','pos']].idxmax(axis=1)
+df['sent_binary'] = df[['neg','pos']].idxmax(axis = 1)
+```
+
+### Filter Stopwords
+
+Next, I am going to remove the stop words from the text. Stopwords are words which does not add much meaning to a sentence. They can safely be ignored without sacrificing the meaning of the sentence. For example, the words like the, I, it, etc. Such words are already captured in a corpus named corpus. We first download it to our python environment. I wrote a define function to loop through each tweet and to filter out stopwords and lowercase all the letters. Applying this function to our data frame, we can see that the 'text' column is now stopwords-free. 
+
+```{python}
+def filterStopwords(df):
+    for val, tweet in enumerate(df['text']):
+        new_text=""
+        for word in nltk.tokenize.word_tokenize(tweet):
+            word = word.lower()
+            if word not in nltk.corpus.stopwords.words('english') and word not in [".",",","!","?",":",";",")","(","'","$",'https','co','rt','@','de','la','the']:
+                    new_text+=word+" "
+            df['text'][val] = new_text
+
+filterStopwords(df)
+```
+
+### Lemmatization
+
+```{python}
+lemmatizer = WordNetLemmatizer()
+def lemmatize(df):
+    for i,tweet in enumerate(df['text']):
+        new_text = ""
+        for word in tweet.split(' '):
+            if wn.synsets(word):
+                new_text += lemmatizer.lemmatize(word,pos= wn.synsets(word)[0].pos()) + " "
+            else:
+                new_text += word + " "
+        df['text'][i] = new_text
+
+lemmatize(df)
+df.head()
+```
+
+### Tidy Dataframe
+
+After inner joining the score data with the health_insurance_df data so that each tweet in the health_insurance data frame will have corresponding sentiment scores, the basic Text cleaning was done. Now we're going to finish up our data frame by renaming columns to more intuitive names, casting the data type, and adding a column to display the label of the tweet sentiment.
+
+```{python}
+df['created_at'] = df['created_at'].apply(lambda x: x.date)
+df.rename(columns={'created_at':'date','lang':'language'},inplace = True)
+df.drop(columns = ['author_id','id','edit_history_tweet_ids','neg','pos','neu','compound'],inplace = True)
+df.head()
+```
+
+### Vectorization
+
+In programming, a vector is a data structure that is similar to a list or an array. For the purpose of an input representation, it is simply a succession of values, with the number of values representing the vector’s “dimensionality.” Text Vectorization is the process of converting text into a numerical representation. I extracted the text from each tweet and save them both to a string for word cloud and to a list for vectorizing. Using the CountVectorizer() function from the sklearn library, we can convert the corpus to a dense matrix. I transformed the matrix to a data frame in which each column takes a word. This gives us a 300 x 1026 huge data frame.
+
+```{python}
+corpus_str = ""
+corpus = []
+df['text'].apply(lambda x: corpus.append(x))
+corpus_str = corpus_str.join(corpus)
+```
+
+```{python}
+vectorizer=CountVectorizer()
+Xs  =  vectorizer.fit_transform(corpus)
+X = np.array(Xs.todense())
+col_names=vectorizer.get_feature_names_out()
+vec = pd.DataFrame(X,columns=col_names)
+vec['label'] = df['label']
+vec.to_csv('/Users/liumingqian/anly-501-project-liumingqian0511/data/01-modified-data/vec.csv')
+vec.head()
+```
+
+Keep working on the vectorized data frame, I summed up the value for each column and sorted them in descending order. By doing this, we are able to get the word frequency in a more intuitive way.
+
+```{python}
+sum_words = Xs.sum(axis=0) 
+words_freq = [[word, sum_words[0, idx]] for word, idx in vectorizer.vocabulary_.items()]
+words_freq =sorted(words_freq, key = lambda x: x[1], reverse=True)
+words_freq_df = pd.DataFrame(words_freq,columns=['word','Frequency'])
+words_freq_df.head(10)
+```
+

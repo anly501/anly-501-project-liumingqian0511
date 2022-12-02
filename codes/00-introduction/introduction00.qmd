@@ -1,0 +1,33 @@
+---
+jupyter: python3
+title: "Introduction"
+date: "11/30/2022"
+pdf-engine: lualatex
+format:
+  html:
+    theme : Minty
+    toc: true
+    toc-title: Contents
+execute:
+    warning: false
+---
+
+This is a semester-long project from one of the most stressful classes in my first semester of graduate school. In this project, I explored new data science knowledge and applied it to multiple analyses using different tools. From topic selection, and data collection, to the actual application of various machine learning models, this project will answer a series of data science questions targeting the data and drawing practical conclusions that integrate with the real world.
+The topic I chose for this project is medical insurance and its impact on individual health. As reported by Investopedia in 2021, the United States continues to rank highest in healthcare spending among the developed nations of the world. According to data released by the Organisation for Economic Co-operation and Development (OECD) in 2019, the U.S. rate was a staggering $11,072 per capita. This statistic reflects the importance of health insurance in the United States and the industry’s size. However, many people believe that such high spending on health insurance was due to the Affordable Care Act (ACA) which required Americans to buy health insurance. The idea behind that is that government-mandated health insurance might yield a health dividend. In addition, good health insurance can be costly. Many health insurance buyers were inevitably purchasing their insurance without knowing its significance, or even reluctant to get one. These situations made me want an in-depth understanding of the medical insurance industry and its relationship with users.
+ 
+I will try to answer the following data science questions, some of which are about the data itself and some of which are about the possible outcomes of the model. If the following questions cannot be answered by subsequent analysis, I will summarize the reasons why they cannot be answered.
+ 
+**Data Science Questions:**
+ 
+1. Whether and how much healthcare use falls when the price of healthcare goes up?
+2. Whether more expensive health insurance coverage cause better health?
+3. Whether different types of insurance (free, coinsurance, catastrophic, Deductible, etc) affect health differently?
+4. Does the level of education affect healthcare use?
+5. Do older people tend to purchase more expansive and generous insurance plans?
+6. Does a better HI plan increase face-to-face visits and hospital admissions?
+7. How does the medical insurance industry affect U.S. revenue?
+8. Whether and how much does health insurance impact individual mental health?
+9. What type of insurance are people most willing to purchase? (Car, Property, Health, Business, etc)
+10. How does Medicare affect hospital revenue?
+ 
+It is noteworthy that since this is a semester-long project, topic selection and design of data science questions were completed in the very early stage of the semester without knowing the future requirements for this project. This leads to the possibility of later developments that deviate from the goals initially set. However, the core purpose of this project, in addition to answering the above data science questions, is to fulfill data cleaning, and visualization and successfully apply different machine learning models.

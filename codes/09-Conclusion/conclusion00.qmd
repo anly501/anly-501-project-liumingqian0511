@@ -1,0 +1,30 @@
+---
+jupyter: python3
+title: "Conclusion"
+date: "11/29/2022"
+pdf-engine: lualatex
+format:
+  html:
+    theme : Minty
+    toc: true
+    code-tools: true
+    code-fold: true
+    code-summary: "Code"
+    toc-title: Contents
+execute:
+    warning: false
+---
+
+Finally, after applying classification, naive bayes, clustering and ARM to the cleaned data, we obtained comprehensive results to gain an in-depth understanding of the insurance industry and the relationship between them and their users. In this project, we spent a lot of time and used a lot of models to focus on the label analysis of data. These include sentiment analysis, classification on the type of insurance, naive bayes on the brand of insurance, etc. However, since these analyses were dependent on very specific variables, the final results can only answer a few questions in the original data science questions that are related to those variables.
+ 
+The first supervised machine learning of data is naive bayes. I chose text data for naive bayes because I wanted to fit a model used to predict insurance brands. However, the final model performance is not ideal, its accuracy is only over 60%, on the premise that we only have four labels. In addition to being unable to fit accurate models for naive bayes, we can conclude that different insurance brands do not have distinctive features to distinguish them.
+ 
+In order to answer the question whether different types of insurance will affect the health of users, I choose to do a decision tree classification on the types of insurance (Free, Coinsurance, Deductible), and the input variable will be health index. The result I expect is that users with a high health index will have a higher probability of being labeled as the purchaser of Free type insurance, because better insurance benefits will positively affect the health status of the customer. However, I realized that the classification result could not directly reflect the relationship between my health index and label, but only reflected the quality of the model. The accuracy of the final model did not exceed 50%, indicating that the use of health index to predict insurance types was inaccurate and not statistically significant. Although this was a little confusing, it also suggested that maybe because the relationship between these two variables was linear, classification was not the right supervised model to show the relationship between them well, instead a regression might be able to do it.
+ 
+Talking about the results from clustering, I want to remind you that our true label for record data has four classes but we manually subset the data and remove the true label (targets) from the data just for practicing the unsupervised model of clustering. Later, the result for clustering showed only three clusters existed. This is not because we did not cluster the data well, but is suggesting to us that our data can have more than one structure (label), other than insurance plan type. Based on different cluster results, we can have different ways to separate our X features.
+ 
+Clustering is very useful in real-life application. In marketing, companies cluster their customer to get to know the customer’s satisfaction with their product so that a better decision-making process can be done. In pharmacy, patients in different cluster can be given different test to examine the medicine, so medicines can be made to target different patients. For the software development industry, companies cluster the search result so that every time a user is searching something particular online, the results are a mixture of the similar matches of your original query.
+ 
+None of the originl data science questions were answered in the association rule mining, however, there is still something that is worth to discuss about. ARM performs better in very large data sets because its core algorithm uses probability.  Larger samples will provide more generalized and more accurate rules.  Unfortunately, the data we used was less than 300 tweets and they had been assigned labels beforehand.  However, ARM can play a good role in analyzing the relationship between text, and its results can also be very meaningful. If we didn't assign labels to every tweet beforehand, and only kept the rule that the right-hand side was a word related to an insurance brand, like "unitedhealth", then the generalized rules would offer keywords for different brands of insurance. These keywords may reflect the quality, user experience, benefits, disadvantages, and so on of the brand insurance.  This will help brands to upgrade their products in a more targeted and accurate way. Although we have not generated practical and meaningful rules on the current data, the efficiency and usefulness of ARM for text data are undeniable. 
+
+Finally, I failed to answer many questions about the relationship between insurance price and revenue of the United States, which made it impossible for me to summarize whether there is government intervention in the insurance industry of the United States for yielding a health dividend. However, it is undeniable that in this project, we strictly implemented data processing and used a variety of machine learning models to make predictions. The fact that the results don't answer the original question doesn't make them any less important.

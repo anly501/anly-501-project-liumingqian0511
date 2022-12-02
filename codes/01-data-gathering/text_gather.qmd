@@ -1,0 +1,200 @@
+---
+jupyter: python3
+title: "Text Data Gathering"
+date: "11/29/2022"
+pdf-engine: lualatex
+format:
+  html:
+    theme : Minty
+    toc: true
+    code-tools: true
+    code-fold: true
+    code-summary: "Code"
+    toc-title: Contents
+execute:
+    warning: false
+---
+
+```{python}
+#| id: kougMyICtNx2
+#| id: kougMyICtNx2
+import pandas as pd
+import os
+import time
+import requests
+import json
+import csv
+from tqdm import tqdm
+import tweepy
+import requests
+import pandas as pd
+import os
+import matplotlib.pyplot as plt
+import numpy as np
+import wikipedia
+from wordcloud import WordCloud, STOPWORDS
+```
+## Text data and API 
+
+Text analysis is crucial in the data science field. It is the process of extracting meaning from text. For example, this can be analyzing text written by customers in a customer survey, with a focus on finding common themes and trends. The idea is to be able to examine the customer feedback to inform the business on taking strategic action, in order to improve customer experience. In this section, I will show you the steps for gathering text data that is related to my topic using Twitter API and Wikipedia API. Before we gather data, let’s first introduce you to API.
+
+**What is API?**
+
+I am going to explain API using a simple and non-IT-related example. When you go to a restaurant and order some food, you will interact with the waiter. You can order food, and drink, ask for a menu, request bills, and so on. You do not have to worry about stoves, dishes, or ovens because in this case, the waiter is shielding you from all the complicated stuff that happens behind the scenes. The waiter will be an interface between you and all the services that the restaurant offers. In a way, the waiter can be seen as the API of the restaurant in this example.
+
+The term API stands for Application Programmable Interface, it is a way for different programs to work together in various ways. There are many types of APIs and reasons why they are used, but in this project, the main function of API is to get access to data from third parties.
+
+
+### Twitter API
+
+I decided to use the Twitter API to gather the first text data on health insurance. The output data is mainly tweeted from users. I think the most intuitive and objective way to get users’ feedback on the insurance industry is to collect their direct comments about it on their social platforms. The first step to accessing the data from a third party is always getting authentication from it. For Twitter API, I registered a development account and received my own access key and tokens. This will link my usage of data to the account and store my project. Next, I defined the search_twitter function to customize the features of data to gather including keywords, max_results, language, and so on.
+
+Since I am curious about the health insurance industry, I decided to gather tweets with the most popular health insurance brand name in them. Thus, the list I created to search tweets includes ‘UnitedHealth’,‘ Anthem’,‘ Aetna’, ‘Cigna’, and ‘Humana’.
+
+
+```{python}
+#| id: OflI_Jnp3YFc
+#| id: OflI_Jnp3YFc
+consumer_key = 'Yf97lN35cmpNjqvs4YloK5bgj'
+consumer_secret = 'gtx7aYcUfP8xR4UcSP53h7HkVnq8oUnn3hQgH24tKmMPJ9wZlw'
+access_token = '1453449116302860297-8CBLV2AMCBbMQcmzyzxr9beZo03EkU'
+access_token_secret = 'll1zMrp5eaTOxLYXrO8lhaph7IL4paJ4PjAdkrri6ILKY'
+bearer_token = 'AAAAAAAAAAAAAAAAAAAAABVsegEAAAAASKd3LMyDMSW7bO6pWA0iF9R23cM%3DsCTiS4uKWVzw9tqUhmvD5NDL6zbnd2NCO5BK66jcG3uanmxz6D'
+ 
+#| id: yUr7fbzp3Pyv
+#| id: yUr7fbzp3Pyv
+# Authenticate to Twitter
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth) 
+```
+
+
+```{python}
+#| id: 1UNXJC2L3Szz
+#| id: 1UNXJC2L3Szz
+# define search_twitter function
+def search_twitter(query, max_results,tweet_fields, bearer_token = bearer_token):
+    headers = {"Authorization": "Bearer {}".format(bearer_token)}
+    url = "https://api.twitter.com/2/tweets/search/recent?query={}&max_results={}&{}".format(query, max_results,tweet_fields)
+    print("--------------",url,"--------------")
+    response = requests.request("GET", url, headers=headers)
+    if response.status_code != 200:
+        raise Exception(response.status_code, response.text)
+    return response.json()
+```
+
+```{python}
+#| id: juwDVNTZ3izs
+#| colab: {base_uri: 'https://localhost:8080/'}
+#| id: juwDVNTZ3izs
+#| outputId: 9eb2aab7-955b-40b9-e7b4-0341e4bc2b2b
+tweet_fields = "tweet.fields=text,author_id,created_at,lang"
+search_tweets = ['UnitedHealth','Anthem','Aetna','Cigna','Humana']
+for idx,val in enumerate(search_tweets):
+    tweets_jsondump = []
+    json_response1 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token)
+    json_response2 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token)
+    json_response3 = search_twitter(query = str(val), max_results = 100, tweet_fields = tweet_fields, bearer_token=bearer_token)
+
+    for i in json_response1['data']:
+        tweets_jsondump.append(i)
+    for i in json_response2['data']:
+        tweets_jsondump.append(i)
+    for i in json_response3['data']:
+        tweets_jsondump.append(i)
+    with open(str(val)+'.json','w') as json_file:
+        json.dump(tweets_jsondump,json_file)
+        json_file.close()
+```
+
+
+```{python}
+#| id: ge-vyJEjPb5h
+#| colab: {base_uri: 'https://localhost:8080/'}
+#| id: ge-vyJEjPb5h
+#| outputId: 6d21d57e-beec-4b24-a847-b0ef23caf575
+json_files = [pos_json for pos_json in os.listdir('./') if pos_json.endswith('.json')]
+print(json_files) 
+```
+
+Finally from the Twitter API I got five JSON files named by different insurance brands. For a simple demonstration, I converted them into data frames and searched them for high-frequency words that I thought might appear, including ‘covid’,‘vaccine’,‘policy’, etc. A simple word frequency table and its corresponding barplot are presented below.
+```{python}
+#| id: QO7aKBaHPI04
+#| colab: {base_uri: 'https://localhost:8080/', height: 538}
+#| id: QO7aKBaHPI04
+#| outputId: 50b8eb40-bec7-4785-a1d0-c79f4d75d133
+tweet_fields = "tweet.fields=text,author_id,created_at,lang"
+search_tweets = ['covid','vaccine','policy','health','doctor','patients','insurance','cover','medicaid','medicare']
+#client = tweepy.Client(bearer_token)
+
+df = pd.DataFrame({'words':search_tweets,'count':[0]*10})
+
+for idx, val in enumerate(json_files):
+    open_json = open('./'+val)
+    load_json = json.load(open_json)
+    df_tweet = pd.DataFrame(load_json)
+    for word in search_tweets:
+        for i in range(len(df_tweet.text)): 
+            if word in df_tweet['text'][i]:# condition satisfied?
+                df.loc[df['words']==word,'count'] += 1
+
+print(df)
+
+ax = df.sort_values('count').plot(x = 'words',y='count',kind='bar')
+ax.set_title('Frequency of Words')
+ax.set_xlabel('word')
+ax.set_ylabel('Count')
+```
+
+### Wikipedia
+
+In addition, I used the Wikipedia API to collect the top 10 web pages that appeared on the site when I searched for the word “health insurance”. I saved all the text on this web page into a list called mytext and generated a word cloud poster below. The results are obvious: the most popular words on word cloud are related to insurance and disease.
+
+```{python}
+keywords = wikipedia.search("health insurance", results=10, suggestion=False)
+my_text = ''
+for k in keywords:
+    page = wikipedia.page(title = k)
+    content = page.content
+    my_text += content
+    text_file = open(k+'.txt', "w")
+    n = text_file.write(content)
+    text_file.close()
+
+wordcloud = WordCloud(
+    width = 3000,
+    height = 2000, 
+    random_state=1,
+    background_color='salmon', 
+    colormap='Pastel1', 
+    collocations=False,
+    stopwords = STOPWORDS).generate(my_text)
+plt.figure(figsize=(10, 8))
+plt.imshow(wordcloud) 
+plt.axis("off")
+plt.show()
+```
+
+### Record Data
+
+For record data, I will use two datasets from the RAND Health Insurance Experiment (HIE). One contains demographic information about the subjects in the study and also health variables (outcomes) both before and after the experiment. The other file has information about health care spending. Both dataset consists of 319 variables and 20203 observations. From 1974 to 1982, the RAND Health Insurance Experiment followed 3,958 people aged 14 to 61 from six areas of the country. The participants were randomly assigned to one of 14 insurance plans that had a variety of provisions related to cost-sharing. Besides the variable "plantype", which identifies the assigned insurance group of each individual, the variables that I am going to use for this project are displayed below: 
+
+|Variable   |Definition   |
+|---|---|
+|female   |Female   |
+|blackhisp   |Nonwhite   |
+|age   |Age   |
+|educper   |Education   |
+|income1cpi   |Family income   |
+|hosp   |Hospitalized last year   |
+|ghindx   |General Health Index (before)   |
+|cholest   |Cholesterol (mg/dl) (before)   |
+|systol   |Systolic blood pressure (mm Hg) (before)   |
+|mhi   |Mental Health Index (before)   |
+|ghindxx   |General Health Index (after)   |
+|cholestx   |Cholesterol (mg/dl) (after)   |
+|systolx   |Systolic blood pressure (mm Hg) (after)   |
+|mhix   |Mental Health Index (after)   |
+
+

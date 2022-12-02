@@ -1,0 +1,89 @@
+---
+jupyter: python3
+title: "Text Data Exploring"
+date: "11/30/2022"
+pdf-engine: lualatex
+format:
+  html:
+    theme : Minty
+    toc: true
+    code-tools: true
+    code-fold: true
+    code-summary: "Code"
+    toc-title: Contents
+execute:
+    warning: false
+---
+
+```{python}
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud, STOPWORDS
+import seaborn as sns
+```
+
+### Vectorized data
+
+Remeber when we were cleaning the textual data, we tokenized each tweets and vectorized them into a dataframe. Also, I have sorted the tokenized words in the entire dataset by descending order. Here I printed out 20 highest frenquency word in a vectorized form. 
+
+```{python}
+health_insurance_df = pd.read_csv('/Users/liumingqian/anly-501-project-liumingqian0511/data/01-modified-data/text.csv')
+vec = pd.read_csv('/Users/liumingqian/anly-501-project-liumingqian0511/data/01-modified-data/vec.csv')
+words_freq_df = pd.read_csv('/Users/liumingqian/anly-501-project-liumingqian0511/data/01-modified-data/word_frequency_text.csv')
+```
+
+```{python}
+corpus_str = ""
+corpus = []
+health_insurance_df['text'].apply(lambda x: corpus.append(x))
+corpus_str = corpus_str.join(corpus)
+```
+
+```{python}
+vec_20 = vec[words_freq_df['word'][:20]]
+vec_20.head(10)
+```
+
+### Correlation Heatmap
+
+Correlation heatmaps are a type of plot that visualize the strength of relationships between numerical variables. I subset the vectorized dataframe by the top 20 frequent words and generated a correlation heatmap. The darker the square is, the stronger positive correlation exists between the corresponding two words.
+
+```{python}
+corr=vec_20.corr()
+# # Draw the heatmap with the mask and correct aspect ratio
+sns.heatmap(corr, vmax=1, center=0, square=True, linewidths=.5, cbar_kws={"shrink": .5}, cmap='Blues')
+plt.show()
+```
+
+### Word Frequncy Displaying
+
+- Barplot
+  
+- WordCloud
+
+Both barplot and WordCloud are generated on the subsetted vectorized data. They visualize the top 20 frequent words in the data set. We can see the result from these two visualizing is just the same but in different presentation.
+
+```{python}
+plot = sns.barplot(data=words_freq_df.iloc[:15,:],x='word',y='Frequency')
+plt.xticks(rotation=70)
+plot.set_title('Barplot of Word Frequency')
+plt.show
+```
+
+```{python}
+wordcloud = WordCloud(
+    width = 3000,
+    height = 2000, 
+    random_state=1,
+    background_color='salmon', 
+    colormap='Pastel1', 
+    collocations=False,
+    stopwords = STOPWORDS).generate(corpus_str)
+plt.figure(figsize=(10, 8))
+plt.imshow(wordcloud) 
+plt.axis("off")
+plt.show()
+```
+
